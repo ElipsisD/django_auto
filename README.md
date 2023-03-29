@@ -16,6 +16,8 @@
 
 `DB_HOST`
 
+`SECRET_KEY`
+
 ### План работ:
 
 - парсинг сайта exist.ru с использованием selenium
