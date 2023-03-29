@@ -1,0 +1,13 @@
+{% extends 'autos/base.html' %}
+
+{% block content %}
+<ul>
+    {% for spare in spares %}
+            <li><a href="{{ spare.get_absolute_url }}">
+                Название: <b>{{spare.name}}</b><br>
+                Автомобиль: <b>{{spare.car}}</b><br>
+                Артикул: <b>{{spare.partnumber}}</b><br><br>
+            </a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

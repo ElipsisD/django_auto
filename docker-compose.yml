@@ -1,0 +1,75 @@
+services:
+  web-app:
+    container_name: web-app
+    build:
+      context: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./autoworld:/autoworld
+    env_file:
+      - .env
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    depends_on:
+      - database
+      - selenium
+
+  database:
+    container_name: database
+    image: postgres:14.6-alpine
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  redis:
+    container_name: redis
+    image: redis:7.0.5-alpine
+    hostname: redis
+
+  worker:
+    container_name: worker
+    build:
+      context: .
+    hostname: worker
+    entrypoint: celery
+    command: -A celery_app.app worker --loglevel=info
+    volumes:
+      - ./autoworld:/autoworld
+    links:
+      - redis
+    depends_on:
+      - redis
+      - database
+    env_file:
+      - .env
+
+  flower:
+    container_name: flower
+    build:
+      context: .
+    hostname: flower
+    entrypoint: celery
+    command: -A celery_app.app flower
+    volumes:
+      - ./autoworld:/autoworld
+    links:
+      - redis
+    depends_on:
+      - redis
+    ports:
+      - "5555:5555"
+
+  selenium:
+    container_name: selenium
+    image: selenium/standalone-chrome
+    shm_size: 2gb
+    ports:
+      - 4444:4444
+    restart: always
+
+volumes:
+  pgdata:
+    driver: local
+    name: pgdata

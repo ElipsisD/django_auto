@@ -1,0 +1,13 @@
+{% extends 'autos/base.html' %}
+
+{% block content %}
+<ul>
+    {% for auto in autos %}
+            <li>
+                Марка: <b>{{auto.brand}}</b><br>
+                Модель: <b>{{auto.model}}</b><br>
+                Пробег: <b>{{auto.odo}}</b><br><br>
+            </li>
+    {% endfor %}
+</ul>
+{% endblock %}

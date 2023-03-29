@@ -1,0 +1,15 @@
+{% extends 'autos/base.html' %}
+
+{% block content %}
+<h1>{{title}}</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {% for f in form %}
+    <p><label for="{{f.id_for_label}}">{{f.label}}: </label>{{f}}</p>
+    <div>{{f.errors}}</div>
+    {% endfor %}
+<!--    {{form.as_p}}-->
+    <button type="submit">Регистрация</button>
+</form>
+{% endblock %}

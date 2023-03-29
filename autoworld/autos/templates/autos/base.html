@@ -1,0 +1,59 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="{% static 'autos/css/style.css' %}">
+    <link rel="shortcut icon" href="{% static 'autos/images/main.ico' %}" type="image/x-icon"/>
+    <link href="https://fonts.googleapis.com/css2?family=Tinos:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+
+    <div class="grid-container">
+        <div class="header">
+            <header class="header_head">
+                <div class="header_inner">
+                    <nav>
+                        {% for m in menu %}
+                        <a class="nav_link" href="{% url m.url_name %}">{{m.title}}</a>
+                        {% endfor %}
+                    </nav>
+                    <div class="header_login">
+                        {% if request.user.is_authenticated %}
+                        <span class="nav_span">{{user.username}}</span><span class="nav_span">|</span><a
+                            class="nav_link" href="{% url 'logout' %}">ВЫЙТИ</a>
+                        {% else %}
+                        <a class="nav_link" href="{% url 'register' %}">РЕГИСТРАЦИЯ</a> | <a class="nav_link"
+                                                                                             href="{% url 'login' %}">ВОЙТИ</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </header>
+        </div>
+        <div class="menu">
+            <div class="menu_inner">
+                {% for lm in left_menu %}
+                <div class="menu_item"><a href="{% url lm.url_name %}">{{lm.title}}</a></div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="main">
+            <div class="main_header">
+                {% if request.user.is_authenticated %}
+                <div class="main_header_a"><a href="{% url 'parsing' %}">Обновить</a></div>
+                {% else %}
+                Войди чтобы обновить данные!
+                {% endif %}
+            </div>
+            {% block content %}
+            {% endblock %}
+        </div>
+
+        <div class="footer">Защищено правообладателем</div>
+    </div>
+</div>
+</body>
+</html>

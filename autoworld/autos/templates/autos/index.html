@@ -1,0 +1,31 @@
+{% extends 'autos/base.html' %}
+
+{% block content %}
+<div class="main_content">
+<table class="main_content_table">
+    <tr class="main_content_table_header">
+    <th>Цена, р</th><th>Название</th><th>Автомобиль</th><th>Доставка, дн</th><th>Ссылка</th>
+   </tr>
+    {% for r in requests %}
+        <tr>
+            <td><h3><a href="{{ r.spare.get_absolute_url }}">{{r.price}}</a></h3></td>
+            <td>{{r.spare.name}}</td>
+            <td>{{r.spare.car}}</td>
+            <td>{{r.delivery_time}}</td>
+            <td>{% if r.spare.autodoc_URL %}
+                    <a href="{{r.spare.autodoc_URL}}">Autodoc</a>
+                {% else %}
+                    Autodoc
+                {% endif %}
+                <br>
+                {% if r.spare.exist_URL %}
+                    <a href="{{r.spare.exist_URL}}">Exist</a>
+                {% else %}
+                    Exist
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</div>
+{% endblock %}

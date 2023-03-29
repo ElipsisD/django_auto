@@ -1,0 +1,8 @@
+.idea
+.env
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+/autoworld/dbnew.json
