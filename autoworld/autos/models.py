@@ -16,15 +16,12 @@ class Auto(models.Model):
     class Meta:
         verbose_name = 'автомобиль'
         verbose_name_plural = 'автомобили'
-        # ordering = ['-spare.requests.time_create']
         constraints = [
             models.CheckConstraint(
                 check=models.Q(vin__iregex=r'[a-zA-Z0-9]{17}'),
                 name='длина VIN-номера 17 символов',
                 violation_error_message='длина VIN-номера должна быть 17 символов')
         ]
-    # def save(self, *args, **kwargs):
-    #     return super().save(self, * args, **kwargs)
 
 
 class Request(models.Model):
@@ -60,4 +57,3 @@ class Spare(models.Model):
     class Meta:
         verbose_name = 'запчасть'
         verbose_name_plural = 'запчасти'
-

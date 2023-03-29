@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 
-from autos.models import Spare, Request
+from autos.models import Spare, Request, Auto
 from autos.services.price_parsing.domain.autodoc_parsing import AutoDocParsingService
 
 
@@ -20,11 +20,16 @@ def make_request(user_id: str) -> None:
     Request.objects.bulk_create(objects_to_create)
 
 
-def single_request(user_id: str, url: str) -> None:
+def add_spare(user_id: str, url: str, car: str) -> None:
     user = User.objects.get(pk=user_id)
-    new_requests_data = AutoDocParsingService.parse(list(url))
-    new_requests_data = new_requests_data[url]
-    Request.objects.create(spare=question,
+    new_request_data = AutoDocParsingService.parse([url])
+    new_request_data = new_request_data[url]
+    spare_obj = Spare.objects.create(name=new_request_data.name,
+                                     car=Auto.objects.get(pk=car),
+                                     manufacturer=new_request_data.manufacturer,
+                                     partnumber=new_request_data.partnumber,
+                                     autodoc_URL=url)
+    Request.objects.create(spare=spare_obj,
                            author=user,
-                           price=new_requests_data.price,
-                           delivery_time=new_requests_data.delivery_time)
+                           price=new_request_data.price,
+                           delivery_time=new_request_data.delivery_time)

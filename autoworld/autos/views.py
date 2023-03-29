@@ -5,10 +5,11 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, FormView
+from django.views.generic.edit import ModelFormMixin
 
 from autos.forms import RegisterUserForm, LoginUserForm, AddSpareForm
 from autos.models import Spare, Auto, Request
-from autos.tasks import do_make_request
+from autos.tasks import do_make_request, do_add_spare
 from autos.utils import DataMixin
 
 menu = [{'title': 'Главная страница', 'url_name': 'home'},
@@ -109,7 +110,7 @@ def logout_user(request):
     return redirect('login')
 
 
-class AddSpare(DataMixin, CreateView, FormView):
+class AddSpare(DataMixin, FormView):
     form_class = AddSpareForm
     template_name = 'autos/add_spare.html'
     success_url = reverse_lazy('home')
@@ -118,6 +119,11 @@ class AddSpare(DataMixin, CreateView, FormView):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Новая запчасть')
         return context | c_def
+
+    def form_valid(self, form):
+        data = form.cleaned_data
+        do_add_spare.delay(self.request.user.pk, data['autodoc_URL'], data['car'].pk)
+        return super().form_valid(form)
 
 
 def about(request):
