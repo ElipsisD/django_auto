@@ -36,7 +36,11 @@
         <div class="menu">
             <div class="menu_inner">
                 {% for lm in left_menu %}
+                {% if request.user.is_authenticated %}
                 <div class="menu_item"><a href="{% url lm.url_name %}">{{lm.title}}</a></div>
+                {% else %}
+                <div class="menu_item"><a href="{% url 'login' %}">{{lm.title}}</a></div>
+                {% endif %}
                 {% endfor %}
             </div>
         </div>

@@ -6,7 +6,7 @@ from django.urls import reverse
 class Auto(models.Model):
     brand = models.CharField(max_length=100, verbose_name='марка')
     model = models.CharField(max_length=100, verbose_name='модель')
-    vin = models.CharField(max_length=17, verbose_name='VIN')
+    vin = models.CharField(max_length=17, verbose_name='VIN', unique=True)
     odo = models.PositiveIntegerField(verbose_name='пробег')
     owner = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='владелец')
 
@@ -44,9 +44,9 @@ class Spare(models.Model):
     name = models.CharField(max_length=100, verbose_name='название')
     car = models.ForeignKey('Auto', on_delete=models.DO_NOTHING, verbose_name='автомобиль')
     manufacturer = models.CharField(max_length=100, verbose_name='производитель')
-    partnumber = models.CharField(max_length=100, verbose_name='артикул')
-    autodoc_URL = models.URLField(blank=True, verbose_name='ссылка на Autodoc')
-    exist_URL = models.URLField(blank=True, verbose_name='ссылка на Exist')
+    partnumber = models.CharField(max_length=100, verbose_name='артикул', unique=True)
+    autodoc_URL = models.URLField(blank=True, verbose_name='ссылка на Autodoc', unique=True, null=True)
+    exist_URL = models.URLField(blank=True, verbose_name='ссылка на Exist', unique=True, null=True)
 
     def __str__(self):
         return self.name

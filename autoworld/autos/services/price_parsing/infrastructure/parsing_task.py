@@ -4,7 +4,7 @@ from autos.models import Spare, Request, Auto
 from autos.services.price_parsing.domain.autodoc_parsing import AutoDocParsingService
 
 
-def make_request(user_id: str) -> None:
+def make_request(user_id: int) -> None:
     user = User.objects.get(pk=user_id)
     spares = Spare.objects.all().filter(autodoc_URL__isnull=False)
     print(spares)
@@ -20,7 +20,7 @@ def make_request(user_id: str) -> None:
     Request.objects.bulk_create(objects_to_create)
 
 
-def add_spare(user_id: str, url: str, car: str) -> None:
+def add_spare(user_id: int, url: str, car: int) -> None:
     user = User.objects.get(pk=user_id)
     new_request_data = AutoDocParsingService.parse([url])
     new_request_data = new_request_data[url]
