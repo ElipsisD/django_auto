@@ -1,5 +1,6 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.views import LoginView
+from django.core.paginator import Paginator
 from django.db.models import Max
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -26,7 +27,7 @@ class ActualPrice(DataMixin, ListView):
     def get_queryset(self):
         actual_dates = Request.objects.values('spare_id').annotate(date=Max('time_create'))
         actual_dates = [el['date'] for el in actual_dates]
-        return Request.objects.filter(time_create__in=actual_dates).order_by('spare__name').select_related('spare')
+        return Request.objects.filter(time_create__in=actual_dates).order_by('spare__name').select_related('spare__car')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -71,9 +72,16 @@ class ShowSpare(DataMixin, DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        c_def = self.get_user_context(title='Запчасти')
+        page_request_objects = self.get_request_paginator()
+        c_def = self.get_user_context(title='Запчасти', page_request_objects=page_request_objects)
         return context | c_def
+
+    def get_request_paginator(self):
+        queryset = Request.objects.filter(spare=self.object)
+        paginator = Paginator(queryset, 8)
+        page_number = self.request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+        return page_obj
 
 
 class RegisterUser(DataMixin, CreateView):

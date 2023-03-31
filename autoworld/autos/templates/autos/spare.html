@@ -2,15 +2,61 @@
 
 {% block content %}
 <div class="main_content">
-    Название: <b>{{spare.name}}</b><br>
-    Автомобиль: <b>{{spare.car}}</b><br>
-    Артикул: <b>{{spare.partnumber}}</b><br><br>
-
-{% for req in spare.requests.all %}
-    Цена: <b>{{req.price}}</b><br>
-    Время запроса: <b>{{req.time_create}}</b><br>
-    Время доставки: <b>{{req.time_create}}</b><br><br>
-{% endfor %}
-
+    <div class="main_content_inner">
+        <div class="main_content_header">
+            <div class="main_content_info">
+                <div class="main_content_info_name">
+                    <div>Название:</div>
+                    <div>Автомобиль:</div>
+                    <div>Производитель:</div>
+                    <div>Артикул:</div>
+                </div>
+                <div class="main_content_info_content">
+                    <div>{{spare.name}}</div>
+                    <div>{{spare.car}}</div>
+                    <div>{{spare.manufacturer}}</div>
+                    <div>{{spare.partnumber}}</div>
+                </div>
+            </div>
+            <div class="main_content_graph">Здесь будет график</div>
+        </div>
+        <div class="main_content_requests">
+            <table class="main_content_table">
+                <tr class="main_content_table_header">
+                    <th>Цена, р</th>
+                    <th>Дата запроса</th>
+                    <th>Доставка, дн</th>
+                </tr>
+                {% for req in page_request_objects %}
+                <tr>
+                    <td>{{req.price}}</td>
+                    <td>{{req.time_create|date:"H:i d.m.y"}}</td>
+                    <td>{{req.delivery_time}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% if page_request_objects.has_other_pages %}
+        <nav class="main_content_nav">
+            {% if page_request_objects.number == 1 %}
+            Начало
+            {% else %}
+            <a href="?page=1">Начало</a>
+            {% endif %}
+            {% for p in page_request_objects.paginator.page_range %}
+            {% if page_request_objects.number == p %}
+            {{ p }}
+            {% elif p >= page_request_objects.number|add:-2 and p <= page_request_objects.number|add:2 %}
+            <a href="?page={{ p }}">{{ p }}</a>
+            {% endif %}
+            {% endfor %}
+            {% if page_request_objects.number == page_request_objects.paginator.num_pages %}
+            Конец
+            {% else %}
+            <a href="?page={{ page_request_objects.paginator.num_pages }}">Конец</a>
+            {% endif %}
+        </nav>
+        {% endif %}
+    </div>
 </div>
 {% endblock %}

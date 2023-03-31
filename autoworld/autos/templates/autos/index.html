@@ -8,7 +8,7 @@
    </tr>
     {% for r in requests %}
         <tr>
-            <td><h3><a href="{{ r.spare.get_absolute_url }}">{{r.price}}</a></h3></td>
+            <td><a href="{{ r.spare.get_absolute_url }}">{{r.price}}</a></td>
             <td>{{r.spare.name}}</td>
             <td>{{r.spare.car}}</td>
             <td>{{r.delivery_time}}</td>
