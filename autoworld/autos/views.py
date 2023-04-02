@@ -10,6 +10,7 @@ from django.views.generic.edit import ModelFormMixin
 
 from autos.forms import RegisterUserForm, LoginUserForm, AddSpareForm
 from autos.models import Spare, Auto, Request
+from autos.services.plotting.infrastructure.making_graphs_task import make_graphs
 from autos.tasks import do_make_request, do_add_spare
 from autos.utils import DataMixin
 
@@ -139,5 +140,6 @@ def about(request):
 
 
 def parsing_prices(request):
+    # make_graphs()
     do_make_request.delay(request.user.pk)
     return redirect('home')

@@ -133,6 +133,7 @@ body {
     padding: 0px;
 }
 
+/* Main header */
 .main_header {
     display: flex;
     justify-content: flex-end;
@@ -159,6 +160,7 @@ body {
     color: #2f3332
 }
 
+/* Main content */
 .main_content {
     width: 100%;
     background-color: #f0f5f2;
@@ -218,6 +220,14 @@ body {
     text-align: left;
     margin-top: 5px;
     margin-bottom: 5px;
+}
+
+.main_content_graph {
+}
+
+.main_content_graph img {
+    height: 100%;
+    border-radius: 8px;
 }
 
 .main_content_requests {

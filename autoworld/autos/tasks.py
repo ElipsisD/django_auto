@@ -2,6 +2,7 @@ from celery import shared_task
 from celery_singleton import Singleton
 
 from autos.models import Auto
+from autos.services.plotting.infrastructure.making_graphs_task import make_graphs
 from autos.services.price_parsing.infrastructure.parsing_task import make_request, add_spare
 from celery_app import app
 
@@ -11,11 +12,13 @@ from celery_app import app
 def do_make_request(user_id: int):
     """Выполнения новых запросов для всех запчастей"""
     make_request(user_id)
+    make_graphs()
 
 
 @app.task
 def do_add_spare(user_id: int, url: str, car: int):
     """Выполнение запроса для одной запчасти"""
     add_spare(user_id, url, car)
+    make_graphs()
 
 # docker-compose run --rm web-app sh -c "python manage.py dumpdata auth.user --indent 2 > db.json"

@@ -19,7 +19,6 @@ class SpareInfo(NamedTuple):
     name: str
     manufacturer: str
     partnumber: str
-    # autodoc_URL: str
     price: int
     delivery_time: int
     provider: str

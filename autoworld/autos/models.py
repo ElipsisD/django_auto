@@ -45,6 +45,7 @@ class Spare(models.Model):
     car = models.ForeignKey('Auto', on_delete=models.DO_NOTHING, verbose_name='автомобиль')
     manufacturer = models.CharField(max_length=100, verbose_name='производитель')
     partnumber = models.CharField(max_length=100, verbose_name='артикул', unique=True)
+    price_graph = models.ImageField(null=True, upload_to='graphs', verbose_name='график изменения цен')
     autodoc_URL = models.URLField(blank=True, verbose_name='ссылка на Autodoc', unique=True, null=True)
     exist_URL = models.URLField(blank=True, verbose_name='ссылка на Exist', unique=True, null=True)
 

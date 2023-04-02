@@ -6,3 +6,4 @@
 __pycache__
 db.sqlite3
 /autoworld/dbnew.json
+/autoworld/media/
