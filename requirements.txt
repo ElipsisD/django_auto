@@ -1,4 +1,4 @@
---extra-index-url https://alpine-wheels.github.io/index
+# --extra-index-url https://alpine-wheels.github.io/index
 beautifulsoup4==4.11.2
 celery[redis]==5.2.7
 Django==4.1.7
@@ -14,5 +14,5 @@ psycopg2-binary==2.9.5
 celery_singleton==0.3.1
 pillow==9.4.0
 # numpy==1.24.2
-matplotlib==3.6.2
-# matplotlib
+# matplotlib==3.6.2
+matplotlib

@@ -1,22 +1,22 @@
-#FROM python:3.10-alpine3.16
-FROM python:3.10-alpine
+FROM python:3.10
 
 WORKDIR /autoworld
 EXPOSE 8000
 
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
+RUN apt-get update && \
+    apt-get install -y locales && \
+    sed -i -e 's/# ru_RU.UTF-8 UTF-8/ru_RU.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales
 
-#RUN apk add postgresql-client build-base postgresql-dev
-RUN apk add --update --no-cache --virtual .tmp-build-deps gcc linux-headers postgresql-dev python3-dev libstdc++ g++
+ENV LANG ru_RU.UTF-8
+ENV LC_ALL ru_RU.UTF-8
 
-RUN pip3 install kiwisolver
 COPY requirements.txt /temp/requirements.txt
-RUN #pip install --no-cache-dir -r /temp/requirements.txt
-RUN pip install --upgrade pip & pip install --upgrade setuptools & pip install --no-cache-dir -r /temp/requirements.txt
+RUN pip install --no-cache-dir -r /temp/requirements.txt
 
 COPY autoworld /autoworld
-#USER root
 
-RUN adduser --disabled-password autoworld-user
+RUN #adduser --disabled-password autoworld-user
 
-USER autoworld-user
+#USER autoworld-user
