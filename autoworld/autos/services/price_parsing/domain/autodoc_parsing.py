@@ -6,6 +6,7 @@ from typing import NamedTuple
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
+from selenium.common import TimeoutException
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 # from selenium.webdriver.chrome.service import Service
 # from selenium.webdriver.chrome.webdriver import WebDriver
@@ -76,13 +77,18 @@ class AutoDocParsingService:
             res = {}
             for url in urls:
                 browser.get(url)
-                WebDriverWait(browser, timeout=20).until(
-                    lambda x: x.find_element(by=By.TAG_NAME, value='tbody'))
+                for _ in range(3):
+                    try:
+                        WebDriverWait(browser, timeout=10).until(
+                            lambda x: x.find_element(by=By.TAG_NAME, value='tbody'))
+                        break
+                    except TimeoutException:
+                        browser.refresh()
                 res[url] = cls._detail_parsing(browser.page_source)
                 sleep(1)
             return res
         except Exception as err:
-            print(err)
+            print(f'{type(err)}: {err}')
         finally:
             browser.close()
             browser.quit()
