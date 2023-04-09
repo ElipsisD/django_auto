@@ -184,6 +184,18 @@ body {
     text-transform: uppercase;
 }
 
+.main_content_table_header_dif_plus {
+    color: #f00202;
+    font-size: 10px;
+    font-weight: 300;
+}
+
+.main_content_table_header_dif_minus{
+    color: #009e3f;
+    font-size: 10px;
+    font-weight: 300;
+}
+
 .main_content_header {
     display: flex;
     justify-content: space-around;
@@ -223,6 +235,7 @@ body {
 }
 
 .main_content_graph {
+    font-size: 18px;
 }
 
 .main_content_graph img {

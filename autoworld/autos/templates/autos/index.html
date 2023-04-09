@@ -2,30 +2,41 @@
 
 {% block content %}
 <div class="main_content">
-<table class="main_content_table">
-    <tr class="main_content_table_header">
-    <th>Цена, р</th><th>Название</th><th>Автомобиль</th><th>Доставка, дн</th><th>Ссылка</th>
-   </tr>
-    {% for r in requests %}
+    <table class="main_content_table">
+        <tr class="main_content_table_header">
+            <th>Цена, р</th>
+            <th>Название</th>
+            <th>Автомобиль</th>
+            <th>Доставка, дн</th>
+            <th>Ссылка</th>
+        </tr>
+        {% for r in requests %}
         <tr>
-            <td><a href="{{ r.spare.get_absolute_url }}">{{r.price}}</a></td>
+            <td>
+                <a href="{{ r.spare.get_absolute_url }}">{{r.price}}</a>
+                {% if r.difference > 0 %}
+                <span class="main_content_table_header_dif_plus">(+{{r.difference}})</span>
+                {% elif r.difference < 0 %}
+                <span class="main_content_table_header_dif_minus">({{r.difference}})</span>
+                {% endif %}
+            </td>
             <td>{{r.spare.name}}</td>
             <td>{{r.spare.car}}</td>
             <td>{{r.delivery_time}}</td>
             <td>{% if r.spare.autodoc_URL %}
-                    <a href="{{r.spare.autodoc_URL}}">Autodoc</a>
+                <a href="{{r.spare.autodoc_URL}}">Autodoc</a>
                 {% else %}
-                    Autodoc
+                Autodoc
                 {% endif %}
                 <br>
                 {% if r.spare.exist_URL %}
-                    <a href="{{r.spare.exist_URL}}">Exist</a>
+                <a href="{{r.spare.exist_URL}}">Exist</a>
                 {% else %}
-                    Exist
+                Exist
                 {% endif %}
             </td>
         </tr>
-    {% endfor %}
-</table>
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}
