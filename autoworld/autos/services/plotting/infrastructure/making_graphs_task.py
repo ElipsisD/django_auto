@@ -36,7 +36,7 @@ def _make_graph(spare: Spare):
 
 def _get_data_for_graph(spare: Spare) -> SpareRequestsData:
     """Компоновка данных о ценах и датах запросов для запчасти"""
-    requests = Request.objects.filter(spare=spare)
+    requests = Request.objects.filter(spare=spare).only('price', 'time_create')
     prices, dates = [], []
     for request in requests:
         prices.append(request.price)
