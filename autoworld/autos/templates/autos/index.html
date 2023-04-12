@@ -10,32 +10,40 @@
             <th>Доставка, дн</th>
             <th>Ссылка</th>
         </tr>
-        {% for r in requests %}
+        {% for AD, EX in requests %}
+        {% if AD or EX %}
         <tr>
             <td>
-                <a href="{{ r.spare.get_absolute_url }}">{{r.price}}</a>
-                {% if r.difference > 0 %}
-                <span class="main_content_table_header_dif_plus">(+{{r.difference}})</span>
-                {% elif r.difference < 0 %}
-                <span class="main_content_table_header_dif_minus">({{r.difference}})</span>
+                <a href="{{ AD.spare.get_absolute_url }}">{{AD.price}}</a>
+                {% if AD.difference > 0 %}
+                <span class="main_content_table_header_dif_plus">(+{{AD.difference}})</span>
+                {% elif AD.difference < 0 %}
+                <span class="main_content_table_header_dif_minus">({{AD.difference}})</span>
+                {% endif %}
+                {% if EX.price %}
+                <br>
+                {{EX.price}}
                 {% endif %}
             </td>
-            <td>{{r.spare.name}}</td>
-            <td>{{r.spare.car}}</td>
-            <td>{{r.delivery_time}}</td>
-            <td>{% if r.spare.autodoc_URL %}
-                <a href="{{r.spare.autodoc_URL}}">Autodoc</a>
+            <td>{{AD.spare.name}}</td>
+            <td>{{AD.spare.car}}</td>
+            <td>{{AD.delivery_time}}</td>
+            <td>{% if AD.spare.autodoc_URL %}
+                <a href="{{AD.spare.autodoc_URL}}">Autodoc</a>
                 {% else %}
                 Autodoc
                 {% endif %}
                 <br>
-                {% if r.spare.exist_URL %}
-                <a href="{{r.spare.exist_URL}}">Exist</a>
+                {% if AD.spare.exist_URL %}
+                <a href="{{AD.spare.exist_URL}}">Exist</a>
                 {% else %}
                 Exist
                 {% endif %}
             </td>
         </tr>
+        {% endif %}
+        {% empty %}
+        Пока что нет актуальных данных
         {% endfor %}
     </table>
 </div>

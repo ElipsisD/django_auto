@@ -7,32 +7,17 @@ from typing import NamedTuple
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common import TimeoutException
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 # from selenium.webdriver.chrome.service import Service
 # from selenium.webdriver.chrome.webdriver import WebDriver
 # from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
-
-class SpareInfo(NamedTuple):
-    """Структура данных объектов запчастей"""
-    name: str
-    manufacturer: str
-    partnumber: str
-    price: int
-    delivery_time: int
-    provider: str
+from autos.services.price_parsing.domain.parsing_service import ParsingService, SpareInfo
 
 
-class AutoDocParsingService:
-    """Парсинг данных о запчастях с сайта Autodoc.com по списку ссылок с помощью функции parse"""
-
-    @staticmethod
-    def _make_service() -> webdriver:
-        """Создание и настройка webdriver"""
-        browser = webdriver.Remote('http://selenium:4444', desired_capabilities=DesiredCapabilities.CHROME)
-        return browser
+class AutoDocParsingService(ParsingService):
+    """Парсинг данных о запчастях с сайта Autodoc.ru по списку ссылок с помощью функции parse"""
 
     @staticmethod
     def _auth(browser: webdriver) -> None:
@@ -92,25 +77,3 @@ class AutoDocParsingService:
         finally:
             browser.close()
             browser.quit()
-
-
-# print(*AutoDocParsingService.parse(
-#     ['https://www.autodoc.ru/price/4/W7008', 'https://www.autodoc.ru/price/647/866141Y000']).values(), sep='\n')
-# print(autodoc_parse('W7008'))
-# print(autodoc_parse('2074151'))
-
-
-
-# options = webdriver.ChromeOptions()
-# options = Options()
-# options.add_argument('--no-sandbox')
-# options.add_argument('--disable-dev-shm-usage')
-# options.add_argument('--headless')  # работа браузера в тихом режиме
-# options.headless = True  # работа браузера в тихом режиме
-# options.add_experimental_option("detach", True)  # оставить браузер включенным
-# options.add_argument('--disable-blink-features-AutomationControlled')  # отключение режима WebDriver
-# options.add_argument('user-agent=Mozilla/5.0 (Windows NT 5.1) '
-#                      'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.2117.157 Safari/537.36')
-# driver = Service(os.path.join(BASE_DIR, 'chromedriver.exe'))
-# browser = webdriver.Chrome(service=driver, options=options)
-# browser = WebDriver(options=options)

@@ -5,12 +5,13 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DetailView, FormView
+from django.views.generic.base import TemplateView
 
 from autos.forms import RegisterUserForm, LoginUserForm, AddSpareForm
 from autos.models import Spare, Auto, Request
-from autos.services.making_querysets.querysets import last_request_objects
-from autos.services.plotting.infrastructure.making_graphs_task import make_graphs_for_all_spares
-from autos.tasks import do_add_spare, do_make_request
+from autos.services.making_querysets.querysets import get_actual_prices
+from autos.services.price_parsing.infrastructure.parsing_task import make_exist_request
+from autos.tasks import do_add_spare
 from autos.utils import DataMixin
 
 menu = [{'title': 'Главная страница', 'url_name': 'home'},
@@ -19,17 +20,14 @@ menu = [{'title': 'Главная страница', 'url_name': 'home'},
         ]
 
 
-class ActualPrice(DataMixin, ListView):
-    model = Request
+class ActualPrice(DataMixin, TemplateView):
     template_name = 'autos/index.html'
-    context_object_name = 'requests'
-
-    def get_queryset(self):
-        return last_request_objects().order_by('spare__name').select_related('spare__car')
 
     def get_context_data(self, *, object_list=None, **kwargs):
+        requests = get_actual_prices()
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title='Главная страница')
+        c_def = self.get_user_context(title='Главная страница',
+                                      requests=requests)
         return context | c_def
 
 
@@ -128,7 +126,7 @@ class AddSpare(DataMixin, FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        do_add_spare.delay(self.request.user.pk, data['autodoc_URL'], data['car'].pk)
+        do_add_spare.delay(self.request.user, data['autodoc_URL'], data['car'].pk)
         return super().form_valid(form)
 
 
@@ -137,6 +135,9 @@ def about(request):
 
 
 def parsing_prices(request):
-    # make_graphs_for_all_spares()
-    do_make_request.delay(request.user.pk)
+    # do_make_request(request.user)
+    # do_make_request.delay(request.user)
+    # test_example()
+    # print(get_actual_prices())
+    make_exist_request(request.user)
     return redirect('home')
