@@ -25,7 +25,15 @@ class Auto(models.Model):
 
 
 class Request(models.Model):
+    EXIST = 'EX'
+    AUTODOC = 'AD'
+    SITE_CHOICES = [
+        (EXIST, 'Exist'),
+        (AUTODOC, 'Autodoc'),
+    ]
+
     spare = models.ForeignKey('Spare', on_delete=models.PROTECT, verbose_name='запчасть', related_name='requests')
+    site = models.CharField(max_length=2, choices=SITE_CHOICES, verbose_name='сайт')
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='создано')
     author = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='пользователь')
     price = models.SmallIntegerField(verbose_name='цена')
