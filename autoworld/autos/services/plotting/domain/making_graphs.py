@@ -11,8 +11,10 @@ path = os.path.join(settings.BASE_DIR, 'media/graphs/tmp')
 
 class SpareRequestsData(NamedTuple):
     """Структура данных информации для графиков"""
-    prices: list
-    dates: list
+    AD_prices: list
+    EX_prices: list
+    AD_dates: list
+    EX_dates: list
 
 
 def make_spare_fig(spare: str, data: SpareRequestsData) -> str:
@@ -21,7 +23,8 @@ def make_spare_fig(spare: str, data: SpareRequestsData) -> str:
     matplotlib.rc('ytick', labelsize=16, labelcolor='#7f1700')
     fig = plt.figure(figsize=(7, 4), facecolor='#f0f5f2')
     ax = fig.add_subplot()
-    ax.plot(data.dates, data.prices, marker='s', markerfacecolor='w')
+    ax.plot(data.AD_dates, data.AD_prices, marker='s', markerfacecolor='w')
+    ax.plot(data.EX_dates, data.EX_prices)
     ax.grid()
     ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(ax.xaxis.get_major_locator()))
 

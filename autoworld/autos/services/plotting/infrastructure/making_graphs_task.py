@@ -36,9 +36,13 @@ def _make_graph(spare: Spare):
 
 def _get_data_for_graph(spare: Spare) -> SpareRequestsData:
     """Компоновка данных о ценах и датах запросов для запчасти"""
-    requests = Request.objects.filter(spare=spare).only('price', 'time_create')
-    prices, dates = [], []
+    requests = Request.objects.filter(spare=spare).only('site', 'price', 'time_create')
+    AD_prices, EX_prices, AD_dates, EX_dates = [], [], [], []
     for request in requests:
-        prices.append(request.price)
-        dates.append(request.time_create)
-    return SpareRequestsData(prices, dates)
+        if request.site == 'AD':
+            AD_prices.append(request.price)
+            AD_dates.append(request.time_create)
+        if request.site == 'EX':
+            EX_prices.append(request.price)
+            EX_dates.append(request.time_create)
+    return SpareRequestsData(AD_prices, EX_prices, AD_dates, EX_dates)
