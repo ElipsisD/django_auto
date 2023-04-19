@@ -4,7 +4,7 @@ from autos.models import *
 
 
 class RequestAdmin(admin.ModelAdmin):
-    list_display = ('id', 'spare', 'time_create')
+    list_display = ('id', 'spare', 'site', 'time_create')
     list_display_links = ('id', 'spare')
 
 

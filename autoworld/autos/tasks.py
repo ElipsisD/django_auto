@@ -11,18 +11,14 @@ from celery_app import app
 
 # @shared_task(base=Singleton)
 @app.task
-def do_make_request(user: User):
+def do_make_request(user: str):
     """Выполнения новых запросов для всех запчастей"""
     make_request(user)
     make_graphs_for_all_spares()
 
-@app.task
-def test_example():
-    ExistParsingService.parse()
-
 
 @app.task
-def do_add_spare(user: User, url: str, car: int):
+def do_add_spare(user: str, url: str, car: int):
     """Выполнение запроса для одной запчасти"""
     spare = add_spare(user, url, car)
     make_graph_for_spare(spare.pk)

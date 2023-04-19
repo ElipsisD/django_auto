@@ -1,5 +1,4 @@
 import os
-import re
 from datetime import datetime
 from time import sleep
 
@@ -20,35 +19,53 @@ class ExistParsingService(ParsingService):
     def _auth(browser: webdriver) -> None:
         """Авторизация на сайте"""
         browser.get('https://www.exist.ru/')
-        sleep(2)
+        WebDriverWait(browser, timeout=10).until(
+            lambda x: x.find_element(by=By.TAG_NAME, value='div'))
         browser.find_element(by=By.XPATH, value='//*[@id="pnlLogin"]').click()
-        sleep(2)
+        sleep(1)
         browser.find_element(by=By.XPATH, value='//*[@id="login"]') \
             .send_keys(os.getenv('EXIST_LOGIN'))  # вставляем логин
         browser.find_element(by=By.XPATH, value='//*[@id="pass"]') \
             .send_keys(os.getenv('EXIST_PASSWORD'))  # вставляем пароль
-        sleep(3)
+        sleep(1)
         browser.find_element(by=By.XPATH, value='//*[@id="btnLogin"]').click()
 
-    @staticmethod
-    def _detail_parsing(page: str) -> SpareInfo:
+    @classmethod
+    def _detail_parsing(clc, page: str) -> SpareInfo:
         """Парсинг данных конкретной запчасти"""
         soup = BeautifulSoup(page, 'lxml')
-        tmp = soup.find('div', string=re.compile('Запрошенный артикул')).find_next('div')
-        manufacturer = tmp.find('div', class_='art').text
-        name = tmp.find('a', class_='descr').text
-        price = int(''.join(tmp.find('span', class_='price').text.split()[:-1]))
-        partnumber = tmp.find('div', class_='partno').text.replace(' ', '')
-
-        raw_delivery_time = tmp.find('span', class_='statis').find('a').text.split()[0]
-        raw_delivery_time = datetime.strptime(raw_delivery_time, '%d.%m').replace(year=datetime.now().year)
-        delivery_time = (raw_delivery_time - datetime.now()).days
-
+        tmp = soup.find('h1', class_='fn identifier').text.split()
+        manufacturer = tmp[0]
+        partnumber = ''.join(tmp[1:])
+        name = soup.find('div', class_='subtitle').text
+        price, delivery_time = clc._get_min_price(soup)
         return SpareInfo(name=name,
                          manufacturer=manufacturer,
                          price=price,
                          partnumber=partnumber,
                          delivery_time=delivery_time)
+    @staticmethod
+    def _get_min_price(soup: BeautifulSoup) -> tuple[int, int]:
+        """Поиск минимальной цены на товар и вычисление количество дней доставки, возвращает: (цена, доставка)"""
+        all_price_block = soup.find_all('div', class_='pricerow')
+        min_price_block = 0
+        min_price = 1_000_000
+        for i, div in enumerate(all_price_block):
+            price = int(''.join(div.find('span', class_='price ucatprc').text.split()[:-1]))
+            if price < min_price:
+                min_price = price
+                min_price_block = i
+        raw_delivery_time = all_price_block[min_price_block].find('span', class_='statis').text.split()[0]
+        try:
+            raw_delivery_time = datetime.strptime(raw_delivery_time, '%d.%m').replace(year=datetime.now().year)
+            delivery_time = (raw_delivery_time - datetime.now()).days
+        except Exception as err:
+            print(err)
+            weekday = {'пн': 1, 'вт': 2, 'ср': 3, 'чт': 4, 'пт': 5, 'сб': 6, 'вс': 7}[raw_delivery_time.lower()]
+            delivery_time = weekday - datetime.now().isoweekday() \
+                if weekday - datetime.now().isoweekday() > 0 \
+                else weekday - datetime.now().isoweekday() + 7
+        return min_price, delivery_time
 
     @classmethod
     def parse(cls, urls: list = None) -> dict[str, SpareInfo]:
