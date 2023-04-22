@@ -12,7 +12,7 @@ def last_request_objects() -> QuerySet:
 
 def get_actual_prices() -> list[list[Request | None, Request | None]]:
     """Возвращает список списков из последних актуальных запросов
-    на каждом сайте (если такие запросы существуют) в формате ['AD', 'EX']"""
+    на каждом сайте (если такие запросы существуют) в формате [AD, EX]"""
     queryset = last_request_objects().select_related('spare__car')
     requests = []
     EX_objects = {el.spare.pk: el for el in queryset.filter(site='EX')}

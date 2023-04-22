@@ -69,7 +69,7 @@ class ExistParsingService(ParsingService):
 
     @classmethod
     def parse(cls, urls: list = None) -> dict[str, SpareInfo]:
-        """Запуск парсинга данных о запчастях согласно списку"""
+        """Запуск парсинга данных о запчастях согласно списку, возвращает: {ссылка: данные}"""
         browser = cls._make_service()
         try:
             cls._auth(browser)

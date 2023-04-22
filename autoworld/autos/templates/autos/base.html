@@ -1,6 +1,6 @@
-{% load static %}
-
 <!DOCTYPE html>
+
+{% load static %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -20,6 +20,9 @@
                         {% for m in menu %}
                         <a class="nav_link" href="{% url m.url_name %}">{{m.title}}</a>
                         {% endfor %}
+                        {% if request.user.pk == 1 %}
+                        <a class="nav_link" href="{% url 'parsing' %}">Обновить</a>
+                        {% endif %}
                     </nav>
                     <div class="header_login">
                         {% if request.user.is_authenticated %}
@@ -45,13 +48,6 @@
             </div>
         </div>
         <div class="main">
-            <div class="main_header">
-                {% if request.user.is_authenticated %}
-                <div class="main_header_a"><a href="{% url 'parsing' %}">Обновить</a></div>
-                {% else %}
-                Войди чтобы обновить данные!
-                {% endif %}
-            </div>
             {% block content %}
             {% endblock %}
         </div>

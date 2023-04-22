@@ -4,33 +4,18 @@ from autos.models import Spare, Request, Auto
 from autos.services.making_querysets.querysets import last_request_objects
 from autos.services.price_parsing.domain.autodoc_parsing import AutoDocParsingService
 from autos.services.price_parsing.domain.exist_parsing import ExistParsingService
+from autos.services.price_parsing.domain.parsing_service import SpareInfo
 
 
 def make_request(user: str) -> None:
-    autodoc_new_objects = make_autodoc_request(user)
+    autodoc_new_objects = make_autodoc_requests(user)
     # autodoc_new_objects = []
-    exist_new_objects = make_exist_request(user)
+    exist_new_objects = make_exist_requests(user)
     new_request_objects = autodoc_new_objects + exist_new_objects
     Request.objects.bulk_create(new_request_objects)
 
 
-def add_spare(user_id: str, url: str, car: int) -> Spare:
-    user = User.objects.get(pk=user_id)
-    new_request_data = AutoDocParsingService.parse([url])
-    new_request_data = new_request_data[url]
-    spare_obj = Spare.objects.create(name=new_request_data.name,
-                                     car=Auto.objects.get(pk=car),
-                                     manufacturer=new_request_data.manufacturer,
-                                     partnumber=new_request_data.partnumber,
-                                     autodoc_URL=url)
-    Request.objects.create(spare=spare_obj,
-                           author=user,
-                           price=new_request_data.price,
-                           delivery_time=new_request_data.delivery_time)
-    return spare_obj
-
-
-def make_autodoc_request(user_id: str) -> list[Request]:
+def make_autodoc_requests(user_id: str) -> list[Request]:
     user = User.objects.get(pk=user_id)
     spares = Spare.objects.all().filter(autodoc_URL__isnull=False)
     spares_objects = {el.autodoc_URL: el for el in spares}
@@ -49,7 +34,7 @@ def make_autodoc_request(user_id: str) -> list[Request]:
     return objects_to_create
 
 
-def make_exist_request(user_id: str) -> list[Request]:
+def make_exist_requests(user_id: str) -> list[Request]:
     user = User.objects.get(pk=user_id)
     spares = Spare.objects.all().filter(exist_URL__isnull=False)
     spares_objects = {el.exist_URL: el for el in spares}

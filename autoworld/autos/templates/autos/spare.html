@@ -1,6 +1,7 @@
 {% extends 'autos/base.html' %}
 
 {% block content %}
+{% load static %}
 <div class="main_content">
     <div class="main_content_inner">
         <div class="main_content_header">
@@ -10,15 +11,27 @@
                     <div>Автомобиль:</div>
                     <div>Производитель:</div>
                     <div>Артикул:</div>
+                    <div>Ссылка:</div>
                 </div>
                 <div class="main_content_info_content">
                     <div>{{spare.name}}</div>
                     <div>{{spare.car}}</div>
                     <div>{{spare.manufacturer}}</div>
                     <div>{{spare.partnumber}}</div>
+                    <div>
+                        {% if spare.autodoc_URL %}
+                        <a href="{{ AD.spare.exist_URL }}"><img class="main_content_table_img"
+                                                                src="{% static 'autos/images/autodoc.ico' %}"></a>
+                        {% endif %}
+                        {% if spare.exist_URL %}
+                        <a href="{{ AD.spare.exist_URL }}"><img class="main_content_table_img"
+                                                                src="{% static 'autos/images/exist.ico' %}"></a>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
-            <div class="main_content_graph">Динамика изменения цены<br><img class="" src="{{ spare.price_graph.url }}"></div>
+            <div class="main_content_graph">Динамика изменения цены<br><img class="" src="{{ spare.price_graph.url }}">
+            </div>
         </div>
         <div class="main_content_requests">
             <table class="main_content_table">

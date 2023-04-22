@@ -13,10 +13,11 @@ from autos.services.making_querysets.querysets import get_actual_prices
 from autos.tasks import do_add_spare, do_make_request
 from autos.utils import DataMixin
 
-menu = [{'title': 'Главная страница', 'url_name': 'home'},
-        {'title': 'Автомобили', 'url_name': 'autos'},
-        {'title': 'Запчасти', 'url_name': 'spares'},
-        ]
+menu = [
+    {'title': 'Главная страница', 'url_name': 'home'},
+    {'title': 'Автомобили', 'url_name': 'autos'},
+    {'title': 'Запчасти', 'url_name': 'spares'},
+]
 
 
 class ActualPrice(DataMixin, TemplateView):
