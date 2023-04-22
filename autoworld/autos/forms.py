@@ -33,22 +33,23 @@ class AddSpareForm(forms.ModelForm):
         model = Spare
         fields = ('car', 'autodoc_URL', 'exist_URL')
 
-    def clean_autodoc_URL(self):
-        autodoc_URL = self.cleaned_data.get('autodoc_URL', None)
-        exist_URL = self.cleaned_data.get('exist_URL', None)
-        if not autodoc_URL and not exist_URL:
+    def clean(self):
+        cleaned_data = super().clean()
+        autodoc_url = cleaned_data.get('autodoc_URL', None)
+        exist_url = cleaned_data.get('exist_URL', None)
+        if not autodoc_url and not  exist_url:
             raise ValidationError('Введите хотя бы одну ссылку!')
+
+    def clean_autodoc_URL(self):
+        autodoc_url = self.cleaned_data.get('autodoc_URL', None)
         pattern = r'https:\/\/www\.autodoc\.ru\/.+'
-        if not autodoc_URL or not re.match(pattern, autodoc_URL):
+        if autodoc_url and not re.match(pattern, autodoc_url):
             raise ValidationError('Неверная ссылка')
-        return autodoc_URL
+        return autodoc_url
 
     def clean_exist_URL(self):
-        autodoc_URL = self.cleaned_data.get('autodoc_URL', None)
-        exist_URL = self.cleaned_data.get('exist_URL', None)
-        if not autodoc_URL and not exist_URL:
-            raise ValidationError('Введите хотя бы одну ссылку!')
+        exist_url = self.cleaned_data.get('exist_URL', None)
         pattern = r'https:\/\/www\.exist\.ru\/.+'
-        if not exist_URL or not re.match(pattern, exist_URL):
+        if exist_url and not re.match(pattern, exist_url):
             raise ValidationError('Неверная ссылка')
-        return exist_URL
+        return exist_url

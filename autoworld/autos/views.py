@@ -125,7 +125,8 @@ class AddSpare(DataMixin, FormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
-        do_add_spare.delay(self.request.user.pk, data['autodoc_URL'], data['car'].pk)
+        do_add_spare.delay(self.request.user.pk, data.get('autodoc_URL'), data.get('exist_URL'),
+                           data['car'].pk)
         return super().form_valid(form)
 
 
