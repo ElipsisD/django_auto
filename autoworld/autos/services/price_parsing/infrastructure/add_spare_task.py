@@ -25,11 +25,12 @@ def add_spare(user_id: str, ad_url: str, ex_url: str, car: int) -> Spare:
 def _make_new_request_and_spare(user: User, parsing_data: SpareInfo, car: int,
                                 url: str, site: str) -> tuple[Spare, list[Request]]:
     """Создание объекта новой запчасти и запроса на одном из сайтов"""
+    parameters = {'autodoc_URL': url} if site == 'AD' else {'exist_URL': url}
     spare_obj = Spare.objects.create(name=parsing_data.name,
                                      car=Auto.objects.get(pk=car),
                                      manufacturer=parsing_data.manufacturer,
                                      partnumber=parsing_data.partnumber,
-                                     autodoc_URL=url)
+                                     **parameters)
     req_obj = Request(spare=spare_obj,
                       site=site,
                       author=user,
