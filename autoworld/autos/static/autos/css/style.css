@@ -38,7 +38,7 @@ body {
     'header  header'
     'menu  main'
     'footer  footer';
-    grid-template-columns: 25% auto;
+    grid-template-columns: 15% auto;
     grid-template-rows: 80px 1fr 80px;
 }
 .grid-container > div {
@@ -183,30 +183,45 @@ body {
     border-radius: 8px;
 }
 
+.main_content_table a {
+	color: #7f1700;
+    text-decoration: none;
+    transition: color .2s linear;
+}
+
+.main_content_table a:hover {
+    color: #2f3332
+}
+
 .main_content_price_column {
     min-width: 100px;
 }
 
 .main_content_table_header {
-    text-transform: uppercase;
-    height: 50px;
+    height: 60px;
     background-color: #4aba77;
     border-radius: 8px;
 }
 
 .main_content_table_tr{
-    height: 50px;
-    margin: 8px auto;
+    height: 60px;
 }
 
 .main_content_table_td_price {
     height: 50px;
-    position: relative;
+}
+
+.main_content_table_price_price {
+    margin-right: 5px;
 }
 
 .main_content_table_price {
+    display: flex;
     height: 50%;
     text-align: left;
+    vertical-align: middle;
+    position: relative;
+    align-items: center;
 }
 
 .main_content_table_price div{
@@ -215,6 +230,7 @@ body {
 }
 
 .main_content_table_price_img {
+mar
 }
 
 .main_content_table_price_price {

@@ -2,21 +2,23 @@
 
 {% block content %}
 {% load static %}
+{% load myfilters %}
 
-<!--<div class="main_header">111</div>-->
 <div class="main_content">
     <table class="main_content_table">
         <tr class="main_content_table_header">
             <th>Название</th>
+            <th>Производитель</th>
             <th>Автомобиль</th>
             <th>Доставка, дн</th>
             <th class="main_content_price_column">Цена, руб.</th>
         </tr>
         {% for AD, EX in requests %}
-        <!--        есть запросы с двух сайтов-->
         {% if AD and EX %}
+        <!--        есть запросы с двух сайтов-->
         <tr class="main_content_table_tr">
             <td><a href="{{ AD.spare.get_absolute_url }}">{{ AD.spare.name }}</a></td>
+            <td>{{ AD.spare.manufacturer }}</td>
             <td>{{ AD.spare.car }}</td>
             <td>
                 <div>{{ AD.delivery_time }}</div>
@@ -28,7 +30,7 @@
                             class="main_content_table_img"
                             src="{% static 'autos/images/autodoc.ico' %}"></a></div>
                     <div class="main_content_table_price_price">
-                        <a href="{{ AD.spare.get_absolute_url }}">{{ AD.price }}</a>
+                        <a href="{{ AD.spare.get_absolute_url }}">{{ AD.price|thousands }}</a>
                     </div>
                     {% if AD.difference > 0 %}
                     <div><span class="main_content_table_dif_plus">(+{{ AD.difference }})</span></div>
@@ -41,7 +43,7 @@
                             class="main_content_table_img"
                             src="{% static 'autos/images/exist.ico' %}"></a></div>
                     <div class="main_content_table_price_price">
-                        <a href="{{ AD.spare.get_absolute_url }}">{{ EX.price }}</a>
+                        <a href="{{ AD.spare.get_absolute_url }}">{{ EX.price|thousands }}</a>
                     </div>
                     {% if EX.difference > 0 %}
                     <div><span class="main_content_table_dif_plus">(+{{ EX.difference }})</span></div>
@@ -50,10 +52,11 @@
                     {% endif %}
                 </div>
             </td>
-            <!--            запрос только с Autodoc-->
             {% elif AD %}
+            <!--            запрос только с Autodoc-->
         <tr class="main_content_table_tr">
             <td><a href="{{ AD.spare.get_absolute_url }}">{{ AD.spare.name }}</a></td>
+            <td>{{ AD.spare.manufacturer }}</td>
             <td>{{ AD.spare.car }}</td>
             <td>{{ AD.delivery_time }}</td>
             <td class="main_content_table_td_price">
@@ -62,7 +65,7 @@
                         <img class="main_content_table_img"
                              src="{% static 'autos/images/autodoc.ico' %}"></a></div>
                     <div class="main_content_table_price_price">
-                        <a href="{{ AD.spare.get_absolute_url }}">{{ AD.price }}</a>
+                        <a href="{{ AD.spare.get_absolute_url }}">{{ AD.price|thousands }}</a>
                     </div>
                     {% if AD.difference > 0 %}
                     <div><span class="main_content_table_dif_plus">(+{{ AD.difference }})</span></div>
@@ -71,10 +74,11 @@
                     {% endif %}
                 </div>
             </td>
-            <!--            запрос только с Exist-->
             {% elif EX %}
+        <!--            запрос только с Exist-->
         <tr class="main_content_table_tr">
             <td><a href="{{ EX.spare.get_absolute_url }}">{{ EX.spare.name }}</a></td>
+            <td>{{ EX.spare.manufacturer }}</td>
             <td>{{ EX.spare.car }}</td>
             <td>{{ EX.delivery_time }}</td>
             <td class="main_content_table_td_price">
@@ -83,7 +87,7 @@
                         <img class="main_content_table_img"
                              src="{% static 'autos/images/exist.ico' %}"></a></div>
                     <div class="main_content_table_price_price">
-                        <a href="{{ EX.spare.get_absolute_url }}">{{ EX.price }}</a>
+                        <a href="{{ EX.spare.get_absolute_url }}">{{ EX.price|thousands }}</a>
                     </div>
                     {% if EX.difference > 0 %}
                     <div><span class="main_content_table_dif_plus">(+{{ EX.difference }})</span></div>
