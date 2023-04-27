@@ -20,17 +20,20 @@ def make_autodoc_requests(user_id: str) -> list[Request]:
     spares = Spare.objects.all().filter(autodoc_URL__isnull=False)
     spares_objects = {el.autodoc_URL: el for el in spares}
     new_requests_data = AutoDocParsingService.parse(list(spares_objects.keys()))
-    previous_data = last_request_objects().filter(site='AD').values('spare', 'price')
-    previous_data = {el['spare']: el['price'] for el in previous_data}
+    previous_data = last_request_objects().filter(site='AD').values('spare', 'price', 'difference')
+    previous_data = {el['spare']: {'price': el['price'], 'difference': el['difference']} for el in previous_data}
     objects_to_create = []
     for url, spare_info_obj in new_requests_data.items():
+        if spare_info_obj.price == previous_data.get(spares_objects[url].pk, 0)['price']:
+            difference = previous_data.get(spares_objects[url].pk, 0)['difference']
+        else:
+            difference = spare_info_obj.price - previous_data.get(spares_objects[url].pk, 0)['price']
         objects_to_create.append(Request(spare=spares_objects[url],
                                          site='AD',
                                          author=user,
                                          price=spare_info_obj.price,
                                          delivery_time=spare_info_obj.delivery_time,
-                                         difference=spare_info_obj.price -
-                                                    previous_data.get(spares_objects[url].pk, 0)))
+                                         difference=difference))
     return objects_to_create
 
 
@@ -39,15 +42,18 @@ def make_exist_requests(user_id: str) -> list[Request]:
     spares = Spare.objects.all().filter(exist_URL__isnull=False)
     spares_objects = {el.exist_URL: el for el in spares}
     new_requests_data = ExistParsingService.parse(list(spares_objects.keys()))
-    previous_data = last_request_objects().filter(site='EX').values('spare', 'price')
-    previous_data = {el['spare']: el['price'] for el in previous_data}
+    previous_data = last_request_objects().filter(site='EX').values('spare', 'price', 'difference')
+    previous_data = {el['spare']: {'price': el['price'], 'difference': el['difference']} for el in previous_data}
     objects_to_create = []
     for url, spare_info_obj in new_requests_data.items():
+        if spare_info_obj.price == previous_data.get(spares_objects[url].pk, 0)['price']:
+            difference = previous_data.get(spares_objects[url].pk, 0)['difference']
+        else:
+            difference = spare_info_obj.price - previous_data.get(spares_objects[url].pk, 0)['price']
         objects_to_create.append(Request(spare=spares_objects[url],
                                          site='EX',
                                          author=user,
                                          price=spare_info_obj.price,
                                          delivery_time=spare_info_obj.delivery_time,
-                                         difference=spare_info_obj.price -
-                                                    previous_data.get(spares_objects[url].pk, 0)))
+                                         difference=difference))
     return objects_to_create
