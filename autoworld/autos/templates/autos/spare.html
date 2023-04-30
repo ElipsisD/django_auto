@@ -14,18 +14,18 @@
                     <div>Ссылка:</div>
                 </div>
                 <div class="main_content_info_content">
-                    <div>{{spare.name}}</div>
-                    <div>{{spare.car}}</div>
-                    <div>{{spare.manufacturer}}</div>
-                    <div>{{spare.partnumber}}</div>
+                    <div>{{ spare.name }}</div>
+                    <div>{{ spare.car }}</div>
+                    <div>{{ spare.manufacturer }}</div>
+                    <div>{{ spare.partnumber }}</div>
                     <div>
                         {% if spare.autodoc_URL %}
-                        <a href="{{ AD.spare.exist_URL }}"><img class="main_content_table_img"
-                                                                src="{% static 'autos/images/autodoc.ico' %}"></a>
+                        <a href="{{ spare.autodoc_URL }}"><img class="main_content_table_img"
+                                                               src="{% static 'autos/images/autodoc.ico' %}"></a>
                         {% endif %}
                         {% if spare.exist_URL %}
-                        <a href="{{ AD.spare.exist_URL }}"><img class="main_content_table_img"
-                                                                src="{% static 'autos/images/exist.ico' %}"></a>
+                        <a href="{{ spare.exist_URL }}"><img class="main_content_table_img"
+                                                             src="{% static 'autos/images/exist.ico' %}"></a>
                         {% endif %}
                     </div>
                 </div>
@@ -42,9 +42,9 @@
                 </tr>
                 {% for req in page_request_objects %}
                 <tr>
-                    <td>{{req.price}}</td>
-                    <td>{{req.time_create|date:"H:i d.m.y"}}</td>
-                    <td>{{req.delivery_time}}</td>
+                    <td>{{ req.price }}</td>
+                    <td>{{ req.time_create|date:"H:i d.m.y" }}</td>
+                    <td>{{ req.delivery_time }}</td>
                 </tr>
                 {% endfor %}
             </table>
