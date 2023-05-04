@@ -1,9 +1,10 @@
 .idea
 .env
-*.log
 *.pot
 *.pyc
 __pycache__
 db.sqlite3
 /autoworld/dbnew.json
 /autoworld/media/
+/autoworld/db.json
+/autoworld/autoworld/prod_settings.py

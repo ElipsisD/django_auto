@@ -24,4 +24,4 @@ def do_add_spare(user: str, ad_url: str, ex_url:str, car: int):
     spare = add_spare(user, ad_url, ex_url, car)
     make_graph_for_spare(spare.pk)
 
-# docker-compose run --rm web-app sh -c "python manage.py dumpdata auth.user --indent 2 > db.json"
+# docker-compose run --rm web-app sh -c "python3 manage.py dumpdata --exclude auth.permission --exclude contenttypes > db.json"
