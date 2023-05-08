@@ -31,19 +31,23 @@ class ExistParsingService(ParsingService):
         browser.find_element(by=By.XPATH, value='//*[@id="btnLogin"]').click()
 
     @classmethod
-    def _detail_parsing(clc, page: str) -> SpareInfo:
+    def _detail_parsing(clc, page: str) -> SpareInfo | None:
         """Парсинг данных конкретной запчасти"""
         soup = BeautifulSoup(page, 'lxml')
-        tmp = soup.find('h1', class_='fn identifier').text.split()
-        manufacturer = tmp[0]
-        partnumber = ''.join(tmp[1:])
-        name = soup.find('div', class_='subtitle').text
-        price, delivery_time = clc._get_min_price(soup)
+        try:
+            tmp = soup.find('h1', class_='fn identifier').text.split()
+            manufacturer = tmp[0]
+            partnumber = ''.join(tmp[1:])
+            name = soup.find('div', class_='subtitle').text
+            price, delivery_time = clc._get_min_price(soup)
+        except (IndexError, AttributeError):
+            return None
         return SpareInfo(name=name,
                          manufacturer=manufacturer,
                          price=price,
                          partnumber=partnumber,
                          delivery_time=delivery_time)
+
     @staticmethod
     def _get_min_price(soup: BeautifulSoup) -> tuple[int, int]:
         """Поиск минимальной цены на товар и вычисление количество дней доставки, возвращает: (цена, доставка)"""
@@ -84,7 +88,8 @@ class ExistParsingService(ParsingService):
                         break
                     except TimeoutException:
                         browser.refresh()
-                res[url] = cls._detail_parsing(browser.page_source)
+                if data := cls._detail_parsing(browser.page_source):
+                    res[url] = data
                 sleep(1)
             return res
         except Exception as err:

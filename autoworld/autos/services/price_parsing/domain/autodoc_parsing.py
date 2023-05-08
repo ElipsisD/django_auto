@@ -2,14 +2,10 @@
 import os
 import re
 from time import sleep
-from typing import NamedTuple
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.common import TimeoutException
-# from selenium.webdriver.chrome.service import Service
-# from selenium.webdriver.chrome.webdriver import WebDriver
-# from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -34,17 +30,20 @@ class AutoDocParsingService(ParsingService):
         browser.find_element(by=By.XPATH, value='//*[@id="submit_logon_page"]').click()
 
     @staticmethod
-    def _detail_parsing(page: str) -> SpareInfo:
+    def _detail_parsing(page: str) -> SpareInfo | None:
         """Парсинг данных конкретной запчасти"""
         soup = BeautifulSoup(page, 'lxml')
-        tmp = soup.find('h3', string=re.compile('Все предложения запрошенного номера')) \
-            .find_parent('app-price-table')
-        manufacturer = tmp.find('a', class_='company_info_link').text
-        name = tmp.find('div', class_='title-name').text
-        price = int(tmp.find('td', class_='price').find('span').text.split('.')[0].replace(' ', ''))
-        partnumber = tmp.find('div', class_='title-part').text.replace(manufacturer, '').replace(' ', '')
-        delivery_time = int(tmp.find('td', class_='delivery').find('span').text)
-        provider = tmp.find('span', class_='direction-mob direction').text
+        try:
+            tmp = soup.find('h3', string=re.compile('Все предложения запрошенного номера')) \
+                .find_parent('app-price-table')
+            manufacturer = tmp.find('a', class_='company_info_link').text
+            name = tmp.find('div', class_='title-name').text
+            price = int(tmp.find('td', class_='price').find('span').text.split('.')[0].replace(' ', ''))
+            partnumber = tmp.find('div', class_='title-part').text.replace(manufacturer, '').replace(' ', '')
+            delivery_time = int(tmp.find('td', class_='delivery').find('span').text)
+            provider = tmp.find('span', class_='direction-mob direction').text
+        except AttributeError:
+            return None
         return SpareInfo(name=name,
                          manufacturer=manufacturer,
                          price=price,
@@ -64,12 +63,13 @@ class AutoDocParsingService(ParsingService):
                 browser.get(url)
                 for _ in range(3):
                     try:
-                        WebDriverWait(browser, timeout=10).until(
+                        WebDriverWait(browser, timeout=15).until(
                             lambda x: x.find_element(by=By.TAG_NAME, value='tbody'))
                         break
                     except TimeoutException:
                         browser.refresh()
-                res[url] = cls._detail_parsing(browser.page_source)
+                if data := cls._detail_parsing(browser.page_source):
+                    res[url] = data
                 sleep(1)
             return res
         except Exception as err:
