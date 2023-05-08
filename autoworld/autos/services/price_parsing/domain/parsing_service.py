@@ -4,6 +4,8 @@ from typing import NamedTuple
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 
+from autoworld.settings import COMMAND_EXECUTOR
+
 
 class SpareInfo(NamedTuple):
     """Структура данных объектов запчастей"""
@@ -21,7 +23,7 @@ class ParsingService(ABC):
     @staticmethod
     def _make_service() -> webdriver:
         """Создание и настройка webdriver"""
-        browser = webdriver.Remote('http://selenium:4444', desired_capabilities=DesiredCapabilities.CHROME)
+        browser = webdriver.Remote(COMMAND_EXECUTOR, desired_capabilities=DesiredCapabilities.CHROME)
         return browser
 
     @staticmethod
@@ -41,13 +43,6 @@ class ParsingService(ABC):
     def parse(cls, urls: list) -> dict[str, SpareInfo]:
         """Запуск парсинга данных о запчастях согласно списку"""
         pass
-
-
-# print(*AutoDocParsingService.parse(
-#     ['https://www.autodoc.ru/price/4/W7008', 'https://www.autodoc.ru/price/647/866141Y000']).values(), sep='\n')
-# print(autodoc_parse('W7008'))
-# print(autodoc_parse('2074151'))
-
 
 
 # options = webdriver.ChromeOptions()

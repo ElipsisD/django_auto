@@ -3,6 +3,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+COMMAND_EXECUTOR = 'http://selenium:4444'
+
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = True
@@ -23,6 +25,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIR = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
+# CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_TIMEZONE = 'Asia/Krasnoyarsk'
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'
+# CELERY_RESULT_BACKEND = 'django-db'
+# CELERY_CACHE_BACKEND = 'default'
+# CELERY_ACCEPT_CONTENT = {'application/json'}
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
 
 if DEBUG:
     import socket
