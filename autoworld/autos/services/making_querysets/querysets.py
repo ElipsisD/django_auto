@@ -5,9 +5,9 @@ from autos.models import Request, Spare
 
 def last_request_objects() -> QuerySet:
     """Возвращает данные о последних запросах всех запчастей"""
-    actual_dates = Request.objects.values('spare_id', 'site').annotate(date=Max('time_create'))
-    actual_dates = [el['date'] for el in actual_dates]
-    return Request.objects.filter(time_create__in=actual_dates)
+    actual_pk = Request.objects.values('spare_id', 'site').annotate(last_pk=Max('pk'))
+    actual_pk = [el['last_pk'] for el in actual_pk]
+    return Request.objects.filter(pk__in=actual_pk)
 
 
 def get_actual_prices() -> list[list[Request | None, Request | None]]:
