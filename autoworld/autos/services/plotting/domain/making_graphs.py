@@ -29,6 +29,8 @@ def make_spare_fig(spare: str, data: SpareRequestsData) -> str:
     ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(ax.xaxis.get_major_locator()))
 
     locator = mdates.AutoDateLocator()
+    ax.xaxis.set_major_locator(locator)
+
     formatter = mdates.ConciseDateFormatter(locator)
     formatter.formats = ['%y',
                          '%b',
@@ -38,12 +40,9 @@ def make_spare_fig(spare: str, data: SpareRequestsData) -> str:
                          '%S.%f', ]
     formatter.zero_formats = [''] + formatter.formats[:-1]
     formatter.zero_formats[3] = '%b %d'
-    formatter.offset_formats = [''] * 5
-    ax.xaxis.set_major_locator(locator)
+    formatter.offset_formats = [''] * 6
     ax.xaxis.set_major_formatter(formatter)
 
-    # plt.ylabel('руб')
-    # plt.title(f'Динамика изменения цены')
     graph_path = os.path.join(path, f'{spare}.png')
     fig.savefig(graph_path)
     return graph_path
