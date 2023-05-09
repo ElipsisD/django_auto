@@ -45,6 +45,22 @@ services:
     env_file:
       - .env
 
+  beat:
+    container_name: beat
+    build:
+      context: .
+    hostname: beat
+    entrypoint: celery
+    command: -A celery_app.app beat --loglevel=info
+    volumes:
+      - ./autoworld:/autoworld
+    links:
+      - redis
+    depends_on:
+      - worker
+    env_file:
+      - .env
+
   flower:
     container_name: flower
     build:
