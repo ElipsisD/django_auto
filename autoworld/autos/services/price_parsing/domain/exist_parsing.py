@@ -64,7 +64,6 @@ class ExistParsingService(ParsingService):
             raw_delivery_time = datetime.strptime(raw_delivery_time, '%d.%m').replace(year=datetime.now().year)
             delivery_time = (raw_delivery_time - datetime.now()).days
         except Exception as err:
-            print(err)
             weekday = {'пн': 1, 'вт': 2, 'ср': 3, 'чт': 4, 'пт': 5, 'сб': 6, 'вс': 7}[raw_delivery_time.lower()]
             delivery_time = weekday - datetime.now().isoweekday() \
                 if weekday - datetime.now().isoweekday() > 0 \

@@ -45,4 +45,5 @@ def make_spare_fig(spare: str, data: SpareRequestsData) -> str:
 
     graph_path = os.path.join(path, f'{spare}.png')
     fig.savefig(graph_path)
+    matplotlib.pyplot.close(fig)
     return graph_path
