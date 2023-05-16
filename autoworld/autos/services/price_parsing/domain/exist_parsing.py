@@ -82,11 +82,11 @@ class ExistParsingService(ParsingService):
                 browser.get(url)
                 for _ in range(3):
                     try:
-                        WebDriverWait(browser, timeout=10).until(
+                        WebDriverWait(browser, timeout=15).until(
                             lambda x: x.find_element(by=By.TAG_NAME, value='div'))
                         break
                     except TimeoutException:
-                        browser.refresh()
+                        browser.get(url)
                 if data := cls._detail_parsing(browser.page_source):
                     res[url] = data
                 sleep(1)

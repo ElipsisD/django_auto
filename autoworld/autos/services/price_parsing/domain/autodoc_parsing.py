@@ -67,7 +67,7 @@ class AutoDocParsingService(ParsingService):
                             lambda x: x.find_element(by=By.TAG_NAME, value='tbody'))
                         break
                     except TimeoutException:
-                        browser.refresh()
+                        browser.get(url)
                 if data := cls._detail_parsing(browser.page_source):
                     res[url] = data
                 sleep(1)

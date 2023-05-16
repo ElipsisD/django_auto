@@ -1,10 +1,12 @@
+import os
 from abc import ABC, abstractmethod
 from typing import NamedTuple
 
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
+from selenium.webdriver.chrome.service import Service
 
-from autoworld.settings import COMMAND_EXECUTOR
+from autoworld.settings import COMMAND_EXECUTOR, BASE_DIR
 
 
 class SpareInfo(NamedTuple):
@@ -23,7 +25,14 @@ class ParsingService(ABC):
     @staticmethod
     def _make_service() -> webdriver:
         """Создание и настройка webdriver"""
-        browser = webdriver.Remote(COMMAND_EXECUTOR, desired_capabilities=DesiredCapabilities.CHROME)
+        options = webdriver.ChromeOptions()
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--headless')  # работа браузера в тихом режиме
+        options.add_experimental_option("detach", True)  # оставить браузер включенным
+        options.add_argument('--disable-blink-features-AutomationControlled')  # отключение режима WebDriver
+        browser = webdriver.Chrome(executable_path=os.path.join(BASE_DIR, 'chromedriver.exe'), options=options)
+        # browser = webdriver.Remote(COMMAND_EXECUTOR, desired_capabilities=DesiredCapabilities.CHROME)
         return browser
 
     @staticmethod
