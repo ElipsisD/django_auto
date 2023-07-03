@@ -24,10 +24,10 @@ def make_autodoc_requests(user_id: str) -> list[Request]:
     previous_data = {el['spare']: {'price': el['price'], 'difference': el['difference']} for el in previous_data}
     objects_to_create = []
     for url, spare_info_obj in new_requests_data.items():
-        if spare_info_obj.price == previous_data.get(spares_objects[url].pk, 0)['price']:
-            difference = previous_data.get(spares_objects[url].pk, 0)['difference']
+        if spare_info_obj.price == previous_data.get(spares_objects[url].pk, {}).get('price'):
+            difference = previous_data.get(spares_objects[url].pk, {}).get('difference', 0)
         else:
-            difference = spare_info_obj.price - previous_data.get(spares_objects[url].pk, 0)['price']
+            difference = spare_info_obj.price - previous_data.get(spares_objects[url].pk, {}).get('price', 0)
         objects_to_create.append(Request(spare=spares_objects[url],
                                          site='AD',
                                          author=user,
@@ -46,10 +46,10 @@ def make_exist_requests(user_id: str) -> list[Request]:
     previous_data = {el['spare']: {'price': el['price'], 'difference': el['difference']} for el in previous_data}
     objects_to_create = []
     for url, spare_info_obj in new_requests_data.items():
-        if spare_info_obj.price == previous_data.get(spares_objects[url].pk, 0)['price']:
-            difference = previous_data.get(spares_objects[url].pk, 0)['difference']
+        if spare_info_obj.price == previous_data.get(spares_objects[url].pk, {}).get('price'):
+            difference = previous_data.get(spares_objects[url].pk, {}).get('difference', 0)
         else:
-            difference = spare_info_obj.price - previous_data.get(spares_objects[url].pk, 0)['price']
+            difference = spare_info_obj.price - previous_data.get(spares_objects[url].pk, {}).get('price', 0)
         objects_to_create.append(Request(spare=spares_objects[url],
                                          site='EX',
                                          author=user,

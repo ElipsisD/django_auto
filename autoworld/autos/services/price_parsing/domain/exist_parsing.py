@@ -31,7 +31,7 @@ class ExistParsingService(ParsingService):
         browser.find_element(by=By.XPATH, value='//*[@id="btnLogin"]').click()
 
     @classmethod
-    def _detail_parsing(clc, page: str) -> SpareInfo | None:
+    def _detail_parsing(cls, page: str) -> SpareInfo | None:
         """Парсинг данных конкретной запчасти"""
         soup = BeautifulSoup(page, 'lxml')
         try:
@@ -39,7 +39,7 @@ class ExistParsingService(ParsingService):
             manufacturer = tmp[0]
             partnumber = ''.join(tmp[1:])
             name = soup.find('div', class_='subtitle').text
-            price, delivery_time = clc._get_min_price(soup)
+            price, delivery_time = cls._get_min_price(soup)
         except (IndexError, AttributeError):
             return None
         return SpareInfo(name=name,
@@ -60,14 +60,8 @@ class ExistParsingService(ParsingService):
                 min_price = price
                 min_price_block = i
         raw_delivery_time = all_price_block[min_price_block].find('span', class_='statis').text.split()[0]
-        try:
-            raw_delivery_time = datetime.strptime(raw_delivery_time, '%d.%m').replace(year=datetime.now().year)
-            delivery_time = (raw_delivery_time - datetime.now()).days
-        except Exception as err:
-            weekday = {'пн': 1, 'вт': 2, 'ср': 3, 'чт': 4, 'пт': 5, 'сб': 6, 'вс': 7}[raw_delivery_time.lower()]
-            delivery_time = weekday - datetime.now().isoweekday() \
-                if weekday - datetime.now().isoweekday() > 0 \
-                else weekday - datetime.now().isoweekday() + 7
+        raw_delivery_time = datetime.strptime(raw_delivery_time, '%d.%m.%Y')
+        delivery_time = (raw_delivery_time - datetime.now()).days
         return min_price, delivery_time
 
     @classmethod
