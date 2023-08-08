@@ -12,3 +12,5 @@ db.sqlite3
 /autoworld/celerybeat-schedule.bak
 /autoworld/celerybeat-schedule.dat
 /autoworld/celerybeat-schedule.dir
+/.pytest_cache/
+/autoworld/.pytest_cache/
