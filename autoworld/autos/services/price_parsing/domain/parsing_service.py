@@ -5,6 +5,7 @@ from typing import NamedTuple
 from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 
 from autoworld.settings import COMMAND_EXECUTOR, BASE_DIR
 
@@ -31,7 +32,7 @@ class ParsingService(ABC):
         options.add_argument('--headless')  # работа браузера в тихом режиме
         options.add_experimental_option("detach", True)  # оставить браузер включенным
         options.add_argument('--disable-blink-features-AutomationControlled')  # отключение режима WebDriver
-        browser = webdriver.Chrome(executable_path=os.path.join(BASE_DIR, 'chromedriver.exe'), options=options)
+        browser = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         # browser = webdriver.Remote(COMMAND_EXECUTOR, desired_capabilities=DesiredCapabilities.CHROME)
         return browser
 
