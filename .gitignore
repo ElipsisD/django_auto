@@ -14,3 +14,5 @@ db.sqlite3
 /autoworld/logs/
 /autoworld/static/
 /autoworld/celerybeat-schedule*
+/.pytest_cache/
+/autoworld/.pytest_cache/
