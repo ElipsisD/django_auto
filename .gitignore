@@ -8,7 +8,9 @@ db.sqlite3
 /autoworld/media/
 /autoworld/db.json
 /autoworld/autoworld/prod_settings.py
-/autoworld/logs/debug.log
 /autoworld/celerybeat-schedule.bak
 /autoworld/celerybeat-schedule.dat
 /autoworld/celerybeat-schedule.dir
+/autoworld/logs/
+/autoworld/static/
+/autoworld/celerybeat-schedule*
