@@ -23,6 +23,7 @@ jobs:
           username: ${{ secrets.USER_OF_HOST }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT_OF_HOST }}
+          debug: true
           script: |
             source ~/venv/bin/activate
             git pull
