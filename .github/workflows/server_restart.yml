@@ -13,9 +13,11 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
           chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa $IP_ADDRESS_OF_HOST >> ~/.ssh/known_hosts
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+          IP_ADDRESS_OF_HOST: ${{ secrets.IP_ADDRESS_OF_HOST }}
 
       - name: SSH and run commands on the remote server
         run: |
