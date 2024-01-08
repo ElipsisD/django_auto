@@ -7,6 +7,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
+          chmod 600 ~/.ssh/id_rsa
       - name: SSH and run commands on the remote server
         run: |
           ssh -p ${{ secrets.SSH_PORT_OF_HOST }} ${{ secrets.USER_OF_HOST }}@${{ secrets.IP_ADDRESS_OF_HOST }}
