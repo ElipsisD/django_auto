@@ -1,5 +1,6 @@
 .idea
 .env
+prod.env
 *.pot
 *.pyc
 __pycache__
@@ -7,7 +8,6 @@ db.sqlite3
 /autoworld/dbnew.json
 /autoworld/media/
 /autoworld/db.json
-/autoworld/autoworld/prod_settings.py
 /autoworld/celerybeat-schedule.bak
 /autoworld/celerybeat-schedule.dat
 /autoworld/celerybeat-schedule.dir
