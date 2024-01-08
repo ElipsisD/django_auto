@@ -16,6 +16,12 @@ jobs:
       - name: Adding Known Hosts
         run: ssh-keyscan -p ${{ secrets.SSH_PORT_OF_HOST }} -H ${{ secrets.IP_ADDRESS_OF_HOST }} >> ~/.ssh/known_hosts
 
+      - name: Debug
+        run: |
+          echo "$SSH_PRIVATE_KEY" > /tmp/private_key
+          cat /tmp/private_key
+          ssh-keyscan -p ${{ secrets.SSH_PORT_OF_HOST }} -H ${{ secrets.IP_ADDRESS_OF_HOST }}
+
       - name: Restart Server
         uses: appleboy/ssh-action@master
         with:
