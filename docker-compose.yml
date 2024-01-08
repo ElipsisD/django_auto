@@ -13,13 +13,13 @@ services:
       sh -c "python manage.py runserver 0.0.0.0:8000"
     depends_on:
       - database
-      - selenium
 
   database:
     container_name: database
     image: postgres:14.6
     volumes:
       - pgdata:/var/lib/postgresql/data
+    command: ["-c", "log_timezone=Asia/Krasnoyarsk"]
     env_file:
       - .env
 
@@ -27,6 +27,8 @@ services:
     container_name: redis
     image: redis:7.0.5-alpine
     hostname: redis
+    env_file:
+      - .env
 
   worker:
     container_name: worker
@@ -76,17 +78,8 @@ services:
       - redis
     ports:
       - "5555:5555"
-
-  selenium:
-    container_name: selenium
-    image: selenium/standalone-chrome
-    shm_size: 2gb
-    ports:
-      - 4444:4444
-    environment:
-      - SE_NODE_OVERRIDE_MAX_SESSIONS=true
-      - SE_NODE_MAX_SESSIONS=2
-      - JAVA_OPTS=-XX:ActiveProcessorCount=2
+    env_file:
+      - .env
 
 volumes:
   pgdata:
