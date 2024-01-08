@@ -10,21 +10,29 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_PUBLIC_KEY }}" > ~/.ssh/id_rsa.pub
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
           chmod 600 ~/.ssh/id_rsa
+
       - name: SSH and run commands on the remote server
         run: |
           ssh -p ${{ secrets.SSH_PORT_OF_HOST }} ${{ secrets.USER_OF_HOST }}@${{ secrets.IP_ADDRESS_OF_HOST }}
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
+
       - name: Env activate
         run: |
           source ~/venv/bin/activate
+
       - name: Git pull
         run: |
           git pull
+
       - name: Update requirements
         run: |
           pip install -r ~/django_auto/requirements.txt
+
       - name: Services restart
         run: |
           sudo supervisorctl restart auto celery celerybeat
