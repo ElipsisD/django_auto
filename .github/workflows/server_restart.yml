@@ -29,9 +29,10 @@ jobs:
           port: ${{ secrets.SSH_PORT_OF_HOST }}
           debug: true
           script: |
+            cd ~/django_auto/
             source ~/venv/bin/activate
             git pull
-            pip install -r ~/django_auto/requirements.txt
+            pip install -r requirements.txt
 #            sudo supervisorctl restart auto celery celerybeat
 
 #      - name: Set up SSH
