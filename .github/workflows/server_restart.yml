@@ -7,18 +7,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Install SSH Key
-      #   uses: shimataro/ssh-key-action@v2
-      #   with:
-      #     key: ${{ secrets.SSH_PRIVATE_KEY }}
-      #     known_hosts: unnecessary
-
-      # - name: Adding Known Hosts
-        # run: ssh-keyscan -p ${{ secrets.SSH_PORT_OF_HOST }} -H ${{ secrets.IP_ADDRESS_OF_HOST }} >> ~/.ssh/known_hosts
-
-      # - name: Debug
-      #   run: |
-      #     echo ${{secrets.SSH_PRIVATE_KEY }} | sed 's/./& /g'
 
       - name: Restart Server
         uses: appleboy/ssh-action@master
@@ -33,36 +21,4 @@ jobs:
             source ~/venv/bin/activate
             git pull
             pip install -r requirements.txt
-#            sudo supervisorctl restart auto celery celerybeat
-
-#      - name: Set up SSH
-#        run: |
-#          mkdir -p ~/.ssh/
-#          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-#          echo "$SSH_PUBLIC_KEY" > ~/.ssh/id_rsa.pub
-#          chmod 600 ~/.ssh/id_rsa
-#          ssh-keyscan -t rsa $IP_ADDRESS_OF_HOST >> ~/.ssh/known_hosts
-#        env:
-#          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-#          SSH_PUBLIC_KEY: ${{ secrets.SSH_PUBLIC_KEY }}
-#          IP_ADDRESS_OF_HOST: ${{ secrets.IP_ADDRESS_OF_HOST }}
-#
-#      - name: SSH and run commands on the remote server
-#        run: |
-#          ssh -p ${{ secrets.SSH_PORT_OF_HOST }} ${{ secrets.USER_OF_HOST }}@${{ secrets.IP_ADDRESS_OF_HOST }}
-
-#      - name: Env activate
-#        run: |
-#          source ~/venv/bin/activate
-#
-#      - name: Git pull
-#        run: |
-#          git pull
-#
-#      - name: Update requirements
-#        run: |
-#          pip install -r ~/django_auto/requirements.txt
-#
-#      - name: Services restart
-#        run: |
-#          sudo supervisorctl restart auto celery celerybeat
+            supervisorctl restart auto celery celerybeat
