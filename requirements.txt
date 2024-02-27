@@ -17,3 +17,4 @@ pytest==7.4.0
 pytest-django==4.5.2
 django-environ==0.10.0
 webdriver_manager==4.0.1
+sentry_sdk==1.40.6
