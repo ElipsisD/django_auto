@@ -2,8 +2,8 @@ import os
 from pathlib import Path
 import locale
 
-from . import sentry  # noqa: E402
 from .env_settings import *  # noqa: E402
+from . import sentry  # noqa: F401
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
