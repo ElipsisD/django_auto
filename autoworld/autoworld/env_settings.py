@@ -33,14 +33,8 @@ STATICFILES_DIR = [
 ]
 
 CELERY_BROKER_URL = env.str("REDIS_DOMAIN")
-# CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_TIMEZONE = 'Asia/Krasnoyarsk'
 CELERY_RESULT_BACKEND = env.str("REDIS_DOMAIN")
-# CELERY_RESULT_BACKEND = 'django-db'
-# CELERY_CACHE_BACKEND = 'default'
-# CELERY_ACCEPT_CONTENT = {'application/json'}
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
 
 if DEBUG:
     import socket
