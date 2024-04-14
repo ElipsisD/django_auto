@@ -14,6 +14,8 @@ SECRET_KEY = env.str("SECRET_KEY")
 DEBUG = env.bool("DJANGO_DEBUG")
 
 ALLOWED_HOSTS = env.str("ALLOWED_HOSTS").split()
+CSRF_TRUSTED_ORIGINS = [*ALLOWED_HOSTS]
+
 
 DATABASES = {
     'default': {
