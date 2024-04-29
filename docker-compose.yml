@@ -3,47 +3,71 @@ services:
     container_name: web-app
     build:
       context: .
+      dockerfile: ./docker/Dockerfile
     ports:
       - "8000:8000"
     volumes:
-      - ./autoworld:/autoworld
+      - .:/autoworld
     env_file:
       - .env
-    command: >
-      sh -c "gunicorn autoworld.wsgi:application --bind 0.0.0.0:8000 --workers 4 --reload"
+    entrypoint: bash ./docker/entrypoint.sh server
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8000/api/health/" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     depends_on:
-      - database
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      selenium:
+        condition: service_started
 
   database:
     container_name: database
     image: postgres:14.6
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    command: ["-c", "log_timezone=Asia/Krasnoyarsk"]
+      - ./data/db:/var/lib/postgresql/data
+    command: [ "-c", "log_timezone=Asia/Krasnoyarsk" ]
     env_file:
       - .env
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB -h localhost -p 5432" ]
+      interval: 5s
+      timeout: 3s
+      retries: 5
 
   redis:
     container_name: redis
-    image: redis:7.0.5-alpine
+    image: redis:alpine
     hostname: redis
     env_file:
       - .env
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   worker:
     container_name: worker
     build:
       context: .
+      dockerfile: ./docker/Dockerfile
     hostname: worker
-    entrypoint: celery
-    command: -A celery_app.app worker --loglevel=info
+    entrypoint: bash ./docker/entrypoint.sh celery
     volumes:
-      - ./autoworld:/autoworld
+      - .:/autoworld
     links:
       - redis
     depends_on:
-      - redis
-      - database
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     env_file:
       - .env
 
@@ -51,15 +75,20 @@ services:
     container_name: beat
     build:
       context: .
+      dockerfile: ./docker/Dockerfile
     hostname: beat
-    entrypoint: celery
-    command: -A celery_app.app beat --loglevel=info
+    entrypoint: bash ./docker/entrypoint.sh beat
     volumes:
-      - ./autoworld:/autoworld
+      - .:/autoworld
     links:
       - redis
     depends_on:
-      - worker
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      web-app:
+        condition: service_healthy
     env_file:
       - .env
 
@@ -67,21 +96,32 @@ services:
     container_name: flower
     build:
       context: .
+      dockerfile: ./docker/Dockerfile
     hostname: flower
-    entrypoint: celery
-    command: -A celery_app.app flower
+    entrypoint: bash ./docker/entrypoint.sh flower
     volumes:
-      - ./autoworld:/autoworld
+      - .:/autoworld
     links:
       - redis
     depends_on:
-      - redis
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      web-app:
+        condition: service_healthy
     ports:
       - "5555:5555"
     env_file:
       - .env
 
-volumes:
-  pgdata:
-    driver: local
-    name: pgdata
+  selenium:
+    container_name: selenium
+    image: selenium/standalone-chrome:124.0
+    shm_size: 2gb
+    ports:
+      - "4444:4444"
+    environment:
+      - VNC_NO_PASSWORD=1
+    env_file:
+      - .env
