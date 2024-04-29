@@ -17,9 +17,9 @@ INSTALLED_APPS = [
 
     'django_extensions',
     'debug_toolbar',
-    'django_celery_results',
+    'django_celery_beat',
 
-    'autos.apps.AutosConfig',
+    'autos',
 ]
 
 MIDDLEWARE = [
@@ -79,10 +79,6 @@ locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 
 USE_TZ = True
 
-# USE_L10N = True
-
-STATIC_URL = 'static/'
-
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
@@ -94,3 +90,5 @@ CACHES = {
         'LOCATION': 'redis://redis:6379/1',
     }
 }
+
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"

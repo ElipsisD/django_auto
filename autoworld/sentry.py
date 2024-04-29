@@ -15,8 +15,8 @@ def sentry_init() -> None:
             CeleryIntegration(),
             LoggingIntegration(),  # default = error
         ],
-        sample_rate=1.0,
-        traces_sample_rate=1.0,
+        sample_rate=0,
+        traces_sample_rate=0,
         auto_session_tracking=False,
         max_request_body_size="always",
     )
