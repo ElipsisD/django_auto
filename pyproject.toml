@@ -1,0 +1,108 @@
+[tool.poetry]
+name = "django-auto"
+version = "0.1.0"
+description = ""
+authors = ["Dmitry <da-boyko@mail.ru>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^5.0.4"
+selenium = "^4.20.0"
+django-environ = "^0.11.2"
+gunicorn = "^22.0.0"
+sentry-sdk = "^2.0.1"
+flower = "^2.0.1"
+celery = "^5.4.0"
+matplotlib = "^3.8.4"
+beautifulsoup4 = "^4.12.3"
+pytest = "^8.2.0"
+lxml = "^5.2.1"
+django-extensions = "^3.2.3"
+pytest-django = "^4.8.0"
+django-stubs = "^4.2.7"
+django-celery-beat = "^2.6.0"
+psycopg2-binary = "^2.9.9"
+pytz = "^2024.1"
+django-debug-toolbar = "^4.3.0"
+ruff = "^0.4.2"
+redis = "^5.0.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "migrations",
+    "manage.py",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint]
+ignore-init-module-imports = true
+select = ["ALL"]
+extend-select = [
+    "D401", # Non-imperative-mood
+    "D213", # Multi-line docstring summary should start at the second line
+]
+fixable = ["ALL"]
+ignore = [
+  "FA102", # Missing `from __future__ import annotations`, but uses PEP 585 collection
+  "D100", # Missing docstring in public module
+  "D101", # Missing docstring in public class
+  "D102", # Missing docstring in public method
+  "D104", # Missing docstring in public package
+  "D105", # Missing docstring in magic method
+  "D106", # Missing docstring in public nested class
+  "D107", # Missing docstring in __init__
+  "ANN101", # Missing type annotation for `self` in method
+  "D202", # No blank lines allowed after function docstring (found 1)
+  "D203", # 1 blank line required before class docstring
+  "D212", # Multi-line docstring summary should start at the first line
+  "ANN002", # Missing type annotation for `*args`
+  "ANN003", # Missing type annotation for `**kwargs`
+  "ANN101", # Missing type annotation for `self` in method
+  "ANN102", # Missing type annotation for `cls` in classmethod
+  "FIX002", # Line contains TODO, consider resolving the issue
+  "TD002", # Missing author in TODO
+  "TD003", # Missing issue link on the line following this TODO
+  "RUF001", # String contains ambiguous
+  "RUF002", # String contains ambiguous
+  "RUF003", # String contains ambiguous
+  "W293", # Blank line contains whitespace
+  "G004", # Logging statement uses f-string
+  "COM812", # Trailing comma missing
+]
+
+[tool.ruff.lint.per-file-ignores]
+"/**/admin.py" = [
+    "ANN201",
+    "ANN001"
+]
