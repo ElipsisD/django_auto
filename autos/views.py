@@ -131,5 +131,4 @@ def about(request):
 
 def parsing_prices(request):
     do_make_request.delay(request.user.pk)
-    # do_make_request(request.user.pk)
     return redirect('home')

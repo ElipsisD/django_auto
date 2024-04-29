@@ -36,9 +36,9 @@ class Request(models.Model):
     site = models.CharField(max_length=2, choices=SITE_CHOICES, verbose_name='сайт')
     time_create = models.DateTimeField(auto_now_add=True, verbose_name='создано')
     author = models.ForeignKey(User, on_delete=models.DO_NOTHING, verbose_name='пользователь')
-    price = models.SmallIntegerField(verbose_name='цена')
-    delivery_time = models.SmallIntegerField(verbose_name='срок доставки')
-    difference = models.SmallIntegerField(default=0, verbose_name='отличие от предыдущей цены')
+    price = models.IntegerField(verbose_name='цена')
+    delivery_time = models.IntegerField(verbose_name='срок доставки')
+    difference = models.IntegerField(default=0, verbose_name='отличие от предыдущей цены')
 
     def __str__(self):
         return f'Запрос № {self.pk}'

@@ -1,15 +1,13 @@
 from django.contrib.auth.models import User
 
-from autos.models import Spare, Request, Auto
+from autos.models import Spare, Request
 from autos.services.making_querysets.querysets import last_request_objects
 from autos.services.price_parsing.domain.autodoc_parsing import AutoDocParsingService
 from autos.services.price_parsing.domain.exist_parsing import ExistParsingService
-from autos.services.price_parsing.domain.parsing_service import SpareInfo
 
 
 def make_request(user: str) -> None:
     autodoc_new_objects = make_autodoc_requests(user)
-    # autodoc_new_objects = []
     exist_new_objects = make_exist_requests(user)
     new_request_objects = autodoc_new_objects + exist_new_objects
     Request.objects.bulk_create(new_request_objects)
