@@ -6,7 +6,7 @@ from selenium.webdriver import DesiredCapabilities
 
 
 class SpareInfo(NamedTuple):
-    """Структура данных объектов запчастей"""
+    """Структура данных объектов запчастей."""
     name: str
     manufacturer: str
     partnumber: str
@@ -16,13 +16,13 @@ class SpareInfo(NamedTuple):
 
 
 class ParsingService(ABC):
-    """Парсинг данных о запчастях с сайта Autodoc.com по списку ссылок с помощью функции parse"""
+    """Парсинг данных о запчастях с сайта Autodoc.com по списку ссылок с помощью функции parse."""
 
     @staticmethod
     def _make_service() -> webdriver:
-        """Создание и настройка webdriver"""
+        """Создание и настройка webdriver."""
         options = webdriver.ChromeOptions()
-        options.add_argument('--disable-blink-features-AutomationControlled')  # отключение режима WebDriver
+        options.add_argument("--disable-blink-features-AutomationControlled")  # отключение режима WebDriver
         return webdriver.Remote(
             "http://selenium:4444/wd/hub",
             desired_capabilities=DesiredCapabilities.CHROME,
@@ -32,17 +32,14 @@ class ParsingService(ABC):
     @staticmethod
     @abstractmethod
     def _auth(browser: webdriver) -> None:
-        """Авторизация на сайте"""
-        pass
+        """Авторизация на сайте."""
 
     @staticmethod
     @abstractmethod
     def _detail_parsing(page: str) -> SpareInfo:
-        """Парсинг данных конкретной запчасти"""
-        pass
+        """Парсинг данных конкретной запчасти."""
 
     @classmethod
     @abstractmethod
     def parse(cls, urls: list) -> dict[str, SpareInfo]:
-        """Запуск парсинга данных о запчастях согласно списку"""
-        pass
+        """Запуск парсинга данных о запчастях согласно списку."""

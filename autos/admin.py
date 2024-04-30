@@ -4,18 +4,18 @@ from autos.models import *
 
 
 class RequestAdmin(admin.ModelAdmin):
-    list_display = ('id', 'spare', 'site', 'price', 'time_create')
-    list_display_links = ('id', 'spare')
+    list_display = ("id", "spare", "site", "price", "time_create")
+    list_display_links = ("id", "spare")
 
 
 class AutoAdmin(admin.ModelAdmin):
-    list_display = ('brand', 'model', 'odo', 'owner')
-    list_display_links = ('brand', 'model')
+    list_display = ("brand", "model", "odo", "owner")
+    list_display_links = ("brand", "model")
 
 
 class SpareAdmin(admin.ModelAdmin):
-    list_display = ('name', 'partnumber', 'manufacturer')
-    list_display_links = ('name', 'partnumber', 'manufacturer')
+    list_display = ("name", "partnumber", "manufacturer")
+    list_display_links = ("name", "partnumber", "manufacturer")
 
 
 admin.site.register(Auto, AutoAdmin)
