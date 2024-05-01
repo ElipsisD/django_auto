@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import NamedTuple
 
-from selenium import webdriver
-from selenium.webdriver import DesiredCapabilities
+TIMEOUT = 180
 
 
 class SpareInfo(NamedTuple):
@@ -17,27 +16,6 @@ class SpareInfo(NamedTuple):
 
 class ParsingService(ABC):
     """Парсинг данных о запчастях с сайта Autodoc.com по списку ссылок с помощью функции parse."""
-
-    @staticmethod
-    def _make_service() -> webdriver:
-        """Создание и настройка webdriver."""
-        options = webdriver.ChromeOptions()
-        options.add_argument("--disable-blink-features-AutomationControlled")  # отключение режима WebDriver
-        return webdriver.Remote(
-            "http://selenium:4444/wd/hub",
-            desired_capabilities=DesiredCapabilities.CHROME,
-            options=options
-        )
-
-    @staticmethod
-    @abstractmethod
-    def _auth(browser: webdriver) -> None:
-        """Авторизация на сайте."""
-
-    @staticmethod
-    @abstractmethod
-    def _detail_parsing(page: str) -> SpareInfo:
-        """Парсинг данных конкретной запчасти."""
 
     @classmethod
     @abstractmethod

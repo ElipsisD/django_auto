@@ -26,12 +26,16 @@ def make_autodoc_requests(user_id: str) -> list[Request]:
             difference = previous_data.get(spares_objects[url].pk, {}).get("difference", 0)
         else:
             difference = spare_info_obj.price - previous_data.get(spares_objects[url].pk, {}).get("price", 0)
-        objects_to_create.append(Request(spare=spares_objects[url],
-                                         site="AD",
-                                         author=user,
-                                         price=spare_info_obj.price,
-                                         delivery_time=spare_info_obj.delivery_time,
-                                         difference=difference))
+        objects_to_create.append(
+            Request(
+                spare=spares_objects[url],
+                site="AD",
+                author=user,
+                price=spare_info_obj.price,
+                delivery_time=spare_info_obj.delivery_time,
+                difference=difference
+            )
+        )
     return objects_to_create
 
 
@@ -48,10 +52,14 @@ def make_exist_requests(user_id: str) -> list[Request]:
             difference = previous_data.get(spares_objects[url].pk, {}).get("difference", 0)
         else:
             difference = spare_info_obj.price - previous_data.get(spares_objects[url].pk, {}).get("price", 0)
-        objects_to_create.append(Request(spare=spares_objects[url],
-                                         site="EX",
-                                         author=user,
-                                         price=spare_info_obj.price,
-                                         delivery_time=spare_info_obj.delivery_time,
-                                         difference=difference))
+        objects_to_create.append(
+            Request(
+                spare=spares_objects[url],
+                site="EX",
+                author=user,
+                price=spare_info_obj.price,
+                delivery_time=spare_info_obj.delivery_time,
+                difference=difference
+            )
+        )
     return objects_to_create
