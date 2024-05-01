@@ -17,6 +17,8 @@ DEBUG = env.bool("DJANGO_DEBUG")
 ALLOWED_HOSTS = env.str("ALLOWED_HOSTS").split()
 CSRF_TRUSTED_ORIGINS = env.str("CSRF_TRUSTED_ORIGINS").split()
 
+AUTODOC_LOGIN = env.str("AUTODOC_LOGIN")
+AUTODOC_PASSWORD = env.str("AUTODOC_PASSWORD")
 
 DATABASES = {
     "default": {
