@@ -8,7 +8,6 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.12"
 django = "^5.0.4"
-selenium = "^4.20.0"
 django-environ = "^0.11.2"
 gunicorn = "^22.0.0"
 sentry-sdk = "^2.0.1"
@@ -20,13 +19,14 @@ pytest = "^8.2.0"
 lxml = "^5.2.1"
 django-extensions = "^3.2.3"
 pytest-django = "^4.8.0"
-django-stubs = "^4.2.7"
+django-stubs = "^5.0.0"
 django-celery-beat = "^2.6.0"
 psycopg2-binary = "^2.9.9"
 pytz = "^2024.1"
 django-debug-toolbar = "^4.3.0"
 ruff = "^0.4.2"
 redis = "^5.0.4"
+requests = "^2.31.0"
 
 
 [build-system]
@@ -78,6 +78,7 @@ ignore = [
   "D100", # Missing docstring in public module
   "D101", # Missing docstring in public class
   "D102", # Missing docstring in public method
+  "D103", # Missing docstring in public function
   "D104", # Missing docstring in public package
   "D105", # Missing docstring in magic method
   "D106", # Missing docstring in public nested class
