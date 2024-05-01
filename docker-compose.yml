@@ -21,8 +21,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      selenium:
-        condition: service_started
 
   database:
     container_name: database
@@ -61,8 +59,6 @@ services:
     entrypoint: bash ./docker/entrypoint.sh celery
     volumes:
       - .:/autoworld
-    links:
-      - redis
     depends_on:
       database:
         condition: service_healthy
@@ -80,8 +76,6 @@ services:
     entrypoint: bash ./docker/entrypoint.sh beat
     volumes:
       - .:/autoworld
-    links:
-      - redis
     depends_on:
       database:
         condition: service_healthy
@@ -101,8 +95,6 @@ services:
     entrypoint: bash ./docker/entrypoint.sh flower
     volumes:
       - .:/autoworld
-    links:
-      - redis
     depends_on:
       database:
         condition: service_healthy
@@ -112,16 +104,5 @@ services:
         condition: service_healthy
     ports:
       - "5555:5555"
-    env_file:
-      - .env
-
-  selenium:
-    container_name: selenium
-    image: selenium/standalone-chrome:124.0
-    shm_size: 2gb
-    ports:
-      - "4444:4444"
-    environment:
-      - VNC_NO_PASSWORD=1
     env_file:
       - .env

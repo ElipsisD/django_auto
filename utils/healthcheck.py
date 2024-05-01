@@ -1,4 +1,4 @@
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpRequest, HttpResponse
 
 
 def healthcheck(request: HttpRequest) -> HttpResponse:  # noqa: ARG001
