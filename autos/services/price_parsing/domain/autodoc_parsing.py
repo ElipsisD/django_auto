@@ -33,6 +33,8 @@ class AutoDocParsingService(ParsingService):
                     headers=headers,
                     timeout=TIMEOUT,
                 ).json()
+                if not spare_response.get("name"):
+                    continue
                 data = SpareInfo(
                     name=spare_response["name"],
                     manufacturer=spare_response["manufacturer"]["name"],
